@@ -1,0 +1,20 @@
+.authentication-layout {
+    min-height: 100vh;
+    background-image: url(getImageUrl('background.jpg'));
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    display: inline-flex;
+
+    form {
+        background: rgba(255, 255, 255, .3);
+        margin: auto;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        display: inline-block;
+        vertical-align: middle;
+        backdrop-filter: blur(5px);
+        flex-basis: 50%;
+    }
+}

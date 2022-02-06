@@ -1,0 +1,21 @@
+.dashboard-container .ant-layout-content {
+    padding: 50px;
+
+    .ant-card.ant-card-bordered {
+        padding: 20px;
+        border-radius: 10px;
+        margin: 10px 0;
+
+        .meta-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .meta-description {
+            position: relative;
+            top: -10px;
+        }
+    }
+}

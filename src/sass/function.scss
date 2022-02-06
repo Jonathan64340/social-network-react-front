@@ -1,0 +1,3 @@
+@function getImageUrl($image) {
+    @return 'http://localhost:3000/images/' + $image;
+}

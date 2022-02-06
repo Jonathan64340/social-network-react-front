@@ -1,0 +1,10 @@
+.form-publciation-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: $color-light-black;
+    button {
+        width: 150px;
+        margin-top: 10px;
+    }
+}
