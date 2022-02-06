@@ -72,7 +72,13 @@ export const fr = {
         },
         common: {
             yes: 'oui',
-            no: 'non'
+            no: 'non',
+            action: {
+                message: {
+                    text: 'Message'
+                },
+                friend_request_send: 'Demander en ami'
+            }
         }
     }
 }

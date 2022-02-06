@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
+import HeaderCustom from '../components/header/Header';
 import PublicationForm from '../components/publication-form/PublicationForm';
 import PublicationDetail from '../components/publication-detail/PublicationDetail';
 import { getPublication } from '../endpoints/publication/publication';
-const { Content, Header, Sider, Footer } = Layout;
+const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user }) => {
     const [publication, setPublication] = useState([]);
@@ -35,10 +36,8 @@ const Dashboard = ({ user }) => {
         <>
             <Header></Header>
             <Layout hasSider className="dashboard-container">
-                <Sider>
-                    persistTokenAndRefreshToken
-                </Sider>
                 <Content>
+                    <HeaderCustom user={user} />
                     <PublicationForm onCreate={onCreate} />
                     {publication.map((_publication, index) => (<PublicationDetail content={_publication?.content} time={{ createAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }} id={_publication._id} user={_publication?.user?.username} onDelete={onDelete} key={index} />))}
                 </Content>
