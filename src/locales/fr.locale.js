@@ -81,9 +81,9 @@ export const fr = {
             no: 'non',
             action: {
                 message: {
-                    text: 'Message'
+                    text: 'message'
                 },
-                friend_request_send: 'Demander en ami'
+                friend_request_send: 'demander en ami'
             }
         }
     }

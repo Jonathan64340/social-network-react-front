@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { login } from '../endpoints/authentication/authentication';
+import { getMe } from '../endpoints/profile/profile';
 import i18n from '../i18n';
 import { persistTokenAndRefreshToken } from '../utils/persist.login';
 import { setLogin } from '../actions/user.actions';
@@ -42,6 +43,14 @@ const Login = ({ ...props }) => {
         props.dispatch(setLogin({
             accessToken: user?.accessToken,
             refreshToken: user?.refreshToken
+        }))
+
+        const me = await getMe();
+
+        props.dispatch(setLogin({
+            accessToken: user?.accessToken,
+            refreshToken: user?.refreshToken,
+            ...me
         }))
 
         props.history.push('/');

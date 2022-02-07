@@ -1,3 +1,5 @@
+import { store } from '../index';
+ 
 export const persistTokenAndRefreshToken = (accessToken, refreshToken) => {
     if (accessToken && refreshToken) {
         window.localStorage.setItem('accessToken', accessToken);
@@ -11,8 +13,8 @@ export const persistTokenAndRefreshToken = (accessToken, refreshToken) => {
 
 export const getTokenAndRefreshToken = () => {
     const credentials = {
-        accessToken: window.localStorage.getItem('accessToken'),
-        refreshToken: window.localStorage.getItem('refreshToken')
+        accessToken: window.localStorage.getItem('accessToken') ? window.localStorage.getItem('accessToken') : store?.getState()?.user?.accessToken,
+        refreshToken: window.localStorage.getItem('refreshToken') ? window.localStorage.getItem('refreshToken') : store?.getState()?.user?.refreshToken,
     }
 
     return credentials;

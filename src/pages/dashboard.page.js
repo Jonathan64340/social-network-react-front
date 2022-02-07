@@ -13,14 +13,14 @@ const Dashboard = ({ user }) => {
 
     useEffect(() => {
 
-        if (user?._id) {
+        if (user?.isLogged && user?._id) {
             getPublication({ _id: user?._id })
                 .then(result => {
                     setPublication(result);
                 })
         }
 
-    }, [user?._id]);
+    }, [user?.isLogged, user?._id]);
 
     const onDelete = (id) => {
         setPublication(publication.filter(_publication => _publication?._id !== id && _publication))
