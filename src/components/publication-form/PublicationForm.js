@@ -52,7 +52,7 @@ const PublicationForm = ({ user, onCreate, onEdit, current }) => {
         <Form onFinish={onSubmit} form={form}>
             <Form.Item name="publication"
                 rules={[{ required: true, message: i18n.t('form.required.text') }]}>
-                <TextArea placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear showCount />
+                <TextArea  className="textarea-no-border" placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear showCount />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>

@@ -1,0 +1,62 @@
+.toolbar-container {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    &.sticky {
+        position: fixed;
+        width: 100%;
+        z-index: 100;
+        box-shadow: 0 0 10px $color-show-toolbar-black;
+        animation: toolbar-smooth-in ease-in-out 0.3s;
+        background: #eaeaf5ad;
+        backdrop-filter: blur(6px);
+    }
+
+    .header-toolbar-container {
+        display: flex;
+        align-items: center;
+        flex-basis: 100%;
+        justify-content: space-between;
+        padding: 0 50px;
+        max-width: 1000px;
+        margin: auto;
+
+        .search {
+            display: flex;
+            align-self: center;
+            border-radius: 20px;
+
+            .search-toolbar-input {
+                width: 280px;
+                
+                input {
+                    font-size: 0.6rem;
+                }
+            }
+        }
+
+        .user-container {
+            background: $color-light-white;
+            border: 1px solid $color-light-black;
+            color: $secondary-color;
+            padding: 0 10px;
+            border-radius: 20px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+
+            span:first-child {
+                margin-right: 8px;
+            }
+        }
+    }
+}
+
+@keyframes toolbar-smooth-in {
+    0% {
+        top: -64px;
+    }
+    100% {
+        top: 0;
+    }
+}

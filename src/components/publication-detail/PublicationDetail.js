@@ -5,6 +5,7 @@ import { momentCustom as moment } from '../../_helper/moment_custom';
 import { Card, Avatar, Menu, Popconfirm, Dropdown } from 'antd';
 import { deletePublication } from '../../endpoints/publication/publication';
 import { toast } from 'react-toastify';
+import { connect } from 'react-redux';
 const { Meta } = Card;
 
 const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData }) => {
@@ -60,8 +61,8 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
                 <Meta
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={<div className="meta-container">
-                        <span>{user}</span>
-                        <Dropdown.Button trigger={['click']} overlay={menu} icon={<MoreOutlined />} type="text" />
+                        <span>{rawData?.user?.username}</span>
+                        {(user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu} icon={<MoreOutlined />} type="text" />}
                     </div>}
                     description={<div className="meta-description">
                         <small>
@@ -79,4 +80,5 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
     );
 }
 
-export default PublicationDetail;
+const mapStateToProps = ({ user }) => ({ user });
+export default connect(mapStateToProps)(PublicationDetail);

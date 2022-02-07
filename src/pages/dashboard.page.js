@@ -5,11 +5,29 @@ import HeaderCustom from '../components/header/Header';
 import PublicationForm from '../components/publication-form/PublicationForm';
 import PublicationDetail from '../components/publication-detail/PublicationDetail';
 import { getPublication } from '../endpoints/publication/publication';
+import HeaderToolbar from '../components/header/HeaderToolbar';
 const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user }) => {
     const [publication, setPublication] = useState([]);
     const [current, setCurrent] = useState(false);
+    const [scrollListener, setScrollListener] = useState(null);
+
+    useEffect(() => {
+        const headerRef = document.querySelector('.toolbar-container');
+        setScrollListener(window.addEventListener('scroll', () => {
+            if (window?.scrollY >= 64) {
+                headerRef?.classList?.add('sticky');
+            } else {
+                headerRef?.classList?.remove('sticky');
+            }
+        }));
+
+        // To destroy listenner on unmount
+        return () => {
+            scrollListener.removeEventListener();
+        }
+    }, [])
 
     useEffect(() => {
 
@@ -51,7 +69,9 @@ const Dashboard = ({ user }) => {
 
     return (
         <>
-            <Header />
+            <Header className="toolbar-container">
+                <HeaderToolbar />
+            </Header>
             <Layout hasSider className="dashboard-container">
                 <Content>
                     <HeaderCustom user={user} />
@@ -59,7 +79,7 @@ const Dashboard = ({ user }) => {
                     {publication.map((_publication, index) => (<PublicationDetail
                         content={_publication?.content}
                         time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
-                        id={_publication._id} user={_publication?.user?.username}
+                        id={_publication._id}
                         onDelete={onDelete}
                         onEdit={onEdit}
                         rawData={_publication}

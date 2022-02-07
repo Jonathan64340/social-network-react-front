@@ -76,6 +76,11 @@ export const fr = {
                 delete: 'Voulez-vous supprimer ce poste ?',
             }
         },
+        toolbar: {
+            search: {
+                text: 'Rechercher une personne ou un groupe'
+            }
+        },
         common: {
             yes: 'oui',
             no: 'non',
