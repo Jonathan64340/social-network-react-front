@@ -6,6 +6,7 @@ import { Card, Avatar, Menu, Popconfirm, Dropdown } from 'antd';
 import { deletePublication } from '../../endpoints/publication/publication';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
+import CommentComponent from '../comment-component/CommentComponent';
 const { Meta } = Card;
 
 const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData }) => {
@@ -75,7 +76,8 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
             </>
         }
         >
-            {content}
+            <p>{content}</p>
+            <CommentComponent />
         </Card>
     );
 }

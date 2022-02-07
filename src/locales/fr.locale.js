@@ -69,6 +69,9 @@ export const fr = {
                     success: 'Votre post a été supprimé.'
                 }
             },
+            comment: {
+                drop_comment: 'Ajouter un commentaire ...'
+            },
             description: {
                 modified: '(modifié)'
             },

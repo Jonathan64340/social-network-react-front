@@ -25,9 +25,9 @@ const Dashboard = ({ user }) => {
 
         // To destroy listenner on unmount
         return () => {
-            scrollListener.removeEventListener();
+            scrollListener && scrollListener.removeEventListener();
         }
-    }, [])
+    }, [scrollListener])
 
     useEffect(() => {
 

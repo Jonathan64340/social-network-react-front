@@ -4,26 +4,8 @@
     flex-direction: column;
     background-color: #fff;
     border-radius: 10px;
-    textarea {
-        font-size: 0.8rem;
-        border-radius: 10px;
-        border: 1px solid $color-header-toolbar-background-profile;
-        &:hover {
-            border: 1px solid $color-header-toolbar-background-profile;
-        }
-        &:focus {
-            border: none !important;
-        }
-    }
     button {
         width: 150px;
         margin-top: 10px;
-    }
-}
-
-.textarea-no-border {
-    border: none;
-    span:first-child {
-        border-radius: 10px;
     }
 }
