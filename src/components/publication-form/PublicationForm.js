@@ -1,20 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Form, Button } from 'antd';
 import i18n from '../../i18n';
-import { createPublication } from '../../endpoints/publication/publication';
+import { createPublication, editPublication } from '../../endpoints/publication/publication';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 
 const { TextArea } = Input;
 
-const PublicationForm = ({ user, onCreate }) => {
+const PublicationForm = ({ user, onCreate, onEdit, current }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [form] = Form.useForm();
 
+    useEffect(() => {
+        form.setFieldsValue({
+            publication: current?.content
+        })
+        // eslint-disable-next-line
+    }, [current]);
+
+
     const onSubmit = async (event) => {
         setIsLoading(true);
-        const successPublication = await createPublication({
+        const provider = (current ? editPublication : createPublication);
+        const onEvent = (current ? onEdit : onCreate);
+        const successPublication = await provider({
+            ...(current && { _id: current?._id }),
             ownerId: user?._id,
             content: event?.publication
         });
@@ -22,11 +33,11 @@ const PublicationForm = ({ user, onCreate }) => {
         form.setFieldsValue({
             publication: ''
         });
+
         setIsLoading(false);
 
-        onCreate({ ...successPublication[0] });
-
-        return toast.success(i18n.t(successPublication?.text), {
+        onEvent({ ...successPublication[0] });
+        toast.success(i18n.t(successPublication?.text), {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

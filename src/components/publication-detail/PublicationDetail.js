@@ -7,11 +7,11 @@ import { deletePublication } from '../../endpoints/publication/publication';
 import { toast } from 'react-toastify';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, time }) => {
-
+const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData }) => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
+                onEdit({ ...rawData });
                 break;
 
             case 'delete':
@@ -65,7 +65,9 @@ const PublicationDetail = ({ content, id, user, onDelete, time }) => {
                     </div>}
                     description={<div className="meta-description">
                         <small>
-                            {moment({ date: time?.createAt, fromNowDisplay: true, format: 'llll' })}
+                            {time?.createdAt === time?.modifiedAt ?
+                                moment({ date: time?.createdAt, fromNowDisplay: true, format: 'llll' })
+                                : <>{moment({ date: time?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
                         </small>
                     </div>}
                 />

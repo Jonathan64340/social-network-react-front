@@ -62,9 +62,15 @@ export const fr = {
                 new: {
                     success: 'Votre post a été publié.'
                 },
+                edit: {
+                    success: 'Votre post a été mis à jour.'
+                },
                 delete: {
                     success: 'Votre post a été supprimé.'
                 }
+            },
+            description: {
+                modified: '(modifié)'
             },
             ask: {
                 delete: 'Voulez-vous supprimer ce poste ?',

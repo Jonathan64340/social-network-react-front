@@ -9,7 +9,7 @@ export function createPublication(data) {
 
 export function editPublication(data) {
     return axios
-        .patch(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/edit/${data.id}`, data, { validateStatus: false })
+        .patch(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/edit/${data._id}`, data, { validateStatus: false })
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
