@@ -12,10 +12,6 @@
         backdrop-filter: blur(6px);
     }
 
-    .header-toolbar-right-container {
-        display: flex;
-    }
-
     .header-toolbar-container {
         display: flex;
         align-items: center;
@@ -24,6 +20,10 @@
         padding: 0 50px;
         max-width: 1000px;
         margin: auto;
+
+        .header-toolbar-right-container {
+            display: flex;
+        }
 
         .search {
             display: flex;

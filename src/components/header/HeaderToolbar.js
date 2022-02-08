@@ -12,7 +12,7 @@ const HeaderToolbar = ({ user }) => {
         <div className="search">
             <Search placeholder={i18n.t('toolbar.search.text')} className="search-toolbar-input" onSearch={() => { }} enterButton allowClear />
         </div>
-        <div classNmae="header-toolbar-right-container">
+        <div className="header-toolbar-right-container">
             <Button type="text" size="middle">
                 <Badge count={3} size="small">
                     <BellOutlined />

@@ -69,7 +69,7 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
                         <small>
                             {time?.createdAt === time?.modifiedAt ?
                                 moment({ date: time?.createdAt, fromNowDisplay: true, format: 'llll' })
-                                : <>{moment({ date: time?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
+                                : <>{moment({ date: time?.createdAt, fromNowDisplay: false, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
                         </small>
                     </div>}
                 />
