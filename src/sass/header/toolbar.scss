@@ -12,6 +12,10 @@
         backdrop-filter: blur(6px);
     }
 
+    .header-toolbar-right-container {
+        display: flex;
+    }
+
     .header-toolbar-container {
         display: flex;
         align-items: center;

@@ -27,3 +27,24 @@ export function deletePublication(id) {
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
+
+export function addComment(data) {
+    return axios
+        .post(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?action=new`, data)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}
+
+export function editComment(data) {
+    return axios
+        .patch(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?action=edit`, data)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}
+
+export function deleteComment(id) {
+    return axios
+        .delete(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?id=${id}`)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}
