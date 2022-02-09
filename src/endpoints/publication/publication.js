@@ -30,7 +30,7 @@ export function deletePublication(id) {
 
 export function addComment(data) {
     return axios
-        .post(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?action=new`, data)
+        .post(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment/new`, data)
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
@@ -44,7 +44,7 @@ export function editComment(data) {
 
 export function deleteComment(id) {
     return axios
-        .delete(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?id=${id}`)
+        .delete(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment/delete?id=${id}`)
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }

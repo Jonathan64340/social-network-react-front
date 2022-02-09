@@ -77,7 +77,7 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
         }
         >
             <p>{content}</p>
-            <CommentComponent />
+            <CommentComponent rawData={rawData} />
         </Card>
     );
 }
