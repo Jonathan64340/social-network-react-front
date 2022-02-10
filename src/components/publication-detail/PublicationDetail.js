@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData }) => {
+const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, time, onEdit, rawData }) => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
@@ -77,7 +77,7 @@ const PublicationDetail = ({ content, id, user, onDelete, time, onEdit, rawData 
         }
         >
             <p>{content}</p>
-            <CommentComponent rawData={rawData} />
+            <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} />
         </Card>
     );
 }

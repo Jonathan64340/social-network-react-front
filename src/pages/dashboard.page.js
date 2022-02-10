@@ -67,6 +67,22 @@ const Dashboard = ({ user }) => {
         }
     }
 
+    const onDeleteComment = async (payload) => {
+        if (!payload.publicationId && !payload.commentId) return;
+
+        const _publication = publication;
+        const index = _publication.findIndex(tmpPub => tmpPub?._id === payload?.publicationId && tmpPub);
+        let tmp = _publication;
+        tmp[index] = {
+            ...tmp[index],
+            comments: {
+                ...tmp[index]?.comments,
+                data: tmp[index]?.comments.data.filter(comment => comment?._id !== payload?.commentId && comment)
+            }
+        }
+        setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
+    }
+
     return (
         <>
             <Header className="toolbar-container">
@@ -81,6 +97,7 @@ const Dashboard = ({ user }) => {
                         time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
                         id={_publication._id}
                         onDelete={onDelete}
+                        onDeleteComment={onDeleteComment}
                         onEdit={onEdit}
                         rawData={_publication}
                         key={index}

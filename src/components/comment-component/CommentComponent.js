@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 const { TextArea } = Input;
 
-const CommentComponent = ({ rawData, user }) => {
+const CommentComponent = ({ rawData, user, onDeleteComment }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -21,27 +21,30 @@ const CommentComponent = ({ rawData, user }) => {
         setIsLoading(false);
     };
 
-    const deleteCom = (id) => {
-        deleteComment(id);
+    const deleteCom = async (id) => {
+        await deleteComment(id);
+
+        // check if comment is deleted
+        onDeleteComment({ publicationId: rawData?._id, commentId: id });
     }
 
     const menu = (id) =>
-        (<Menu>
-            <Menu.Item key="edit" icon={<EditOutlined />}>
-                {i18n.t('button.publication.label.edit')}
+    (<Menu>
+        <Menu.Item key="edit" icon={<EditOutlined />}>
+            {i18n.t('button.publication.label.edit')}
+        </Menu.Item>
+        <Popconfirm
+            title={i18n.t('publication.ask.delete')}
+            onConfirm={() => deleteCom(id)}
+            onCancel={() => { }}
+            okText={i18n.t('common.yes')}
+            cancelText={i18n.t('common.no')}
+        >
+            <Menu.Item key="delete" icon={<DeleteOutlined />}>
+                {i18n.t('button.publication.label.delete')}
             </Menu.Item>
-            <Popconfirm
-                title={i18n.t('publication.ask.delete')}
-                onConfirm={() => deleteCom(id)}
-                onCancel={() => {}}
-                okText={i18n.t('common.yes')}
-                cancelText={i18n.t('common.no')}
-            >
-                <Menu.Item key="delete" icon={<DeleteOutlined />}>
-                    {i18n.t('button.publication.label.delete')}
-                </Menu.Item>
-            </Popconfirm>
-        </Menu>
+        </Popconfirm>
+    </Menu>
     );
 
     return (<div className="comment-component-container textarea-no-border">
