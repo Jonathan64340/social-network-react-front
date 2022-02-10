@@ -83,6 +83,55 @@ const Dashboard = ({ user }) => {
         setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
     }
 
+    const onCreateComment = (payload) => {
+
+        if (!payload.ownerId && !payload.publicationId) return;
+
+        const _publication = publication;
+        const index = _publication.findIndex(tmpPub => tmpPub?._id === payload?.publicationId && tmpPub);
+        let tmp = _publication;
+
+        if (tmp[index]?.comments?.data.length) {
+            tmp[index] = {
+                ...tmp[index],
+                comments: {
+                    ...tmp[index]?.comments,
+                    data: [
+                        ...tmp[index]?.comments?.data,
+                        {
+                            ...payload
+                        }
+                    ],
+                    user: [
+                        {
+                            ...tmp[index]?.comments?.user
+                        },
+                        {
+                            ...payload?.user
+                        }
+                    ]
+                }
+            }
+        } else {
+            tmp[index] = {
+                ...tmp[index],
+                comments: {
+                    ...tmp[index]?.comments,
+                    data: [
+                        {
+                            ...payload
+                        }
+                    ],
+                    user: [
+                        { ...payload?.user }
+                    ]
+                }
+            }
+        }
+
+        setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
+    }
+
     return (
         <>
             <Header className="toolbar-container">
@@ -98,6 +147,7 @@ const Dashboard = ({ user }) => {
                         id={_publication._id}
                         onDelete={onDelete}
                         onDeleteComment={onDeleteComment}
+                        onCreateComment={onCreateComment}
                         onEdit={onEdit}
                         rawData={_publication}
                         key={index}

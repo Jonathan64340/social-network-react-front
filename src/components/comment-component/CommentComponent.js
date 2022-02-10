@@ -7,17 +7,19 @@ import { connect } from 'react-redux';
 
 const { TextArea } = Input;
 
-const CommentComponent = ({ rawData, user, onDeleteComment }) => {
+const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
         setIsLoading(true);
-        await addComment({
+        const comment = await addComment({
             publicationId: rawData?._id,
             ownerId: user?._id,
             text: values?.comment
         });
+
+        onCreateComment({ ...comment[0] });
         setIsLoading(false);
     };
 
@@ -54,7 +56,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment }) => {
                     <List.Item.Meta
                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                         title={<div className="meta-container">
-                            <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0].username}</span>
+                            <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
                             {<Dropdown.Button trigger={['click']} overlay={menu(item?._id)} icon={<MoreOutlined />} type="text" />}
                         </div>}
                         description={<p>{item.text}</p>}
