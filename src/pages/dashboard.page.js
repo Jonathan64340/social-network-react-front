@@ -103,9 +103,7 @@ const Dashboard = ({ user }) => {
                         }
                     ],
                     user: [
-                        {
-                            ...tmp[index]?.comments?.user
-                        },
+                        ...tmp[index]?.comments?.user,
                         {
                             ...payload?.user
                         }
