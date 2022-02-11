@@ -33,11 +33,11 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
         onDeleteComment({ publicationId: rawData?._id, commentId: id });
     }
 
-    const menu = (id) =>
+    const menu = (id, ownerId) =>
     (<Menu>
-        <Menu.Item key="edit" icon={<EditOutlined />}>
+        {user?._id === ownerId && <Menu.Item key="edit" icon={<EditOutlined />}>
             {i18n.t('button.publication.label.edit')}
-        </Menu.Item>
+        </Menu.Item>}
         <Popconfirm
             title={i18n.t('publication.ask.delete')}
             onConfirm={() => deleteCom(id)}
@@ -60,7 +60,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                         title={<div className="meta-container">
                             <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
-                            {<Dropdown.Button trigger={['click']} overlay={menu(item?._id)} icon={<MoreOutlined />} type="text" />}
+                            {(user?._id === item?.ownerId || user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu(item?._id, item?.ownerId)} icon={<MoreOutlined />} type="text" />}
                         </div>}
                         description={<p>{item.text}</p>}
                     />
