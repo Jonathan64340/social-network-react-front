@@ -1,5 +1,7 @@
 import i18next from 'i18next';
 import { fr } from './locales/fr.locale';
+import { en } from './locales/en.locale';
+
 
 i18next
   .init({
@@ -8,7 +10,8 @@ i18next
     },
     lng: 'fr',
     resources: {
-      fr
+      fr,
+      en
     },
   })
 
