@@ -20,6 +20,9 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
         });
 
         onCreateComment({ ...comment[0] });
+        form.setFieldsValue({
+            'comment': ''
+        })
         setIsLoading(false);
     };
 
