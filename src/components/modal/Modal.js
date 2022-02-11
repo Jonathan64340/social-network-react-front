@@ -1,45 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button, Input } from 'antd';
 import i18n from '../../i18n';
+import { editPublication, editComment } from '../../endpoints/publication/publication';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
-const ModalCustom = ({ placeholder, type, rawData }) => {
 
-    const [current, setCurrent] = useState(rawData);
+const ModalCustom = ({ placeholder, current, visible, onClose, onEditPublication, onEditComment, user }) => {
+    const [isLoading, setIsLoading] = useState(false);
+
     const [form] = Form.useForm();
     const { TextArea } = Input;
 
     useEffect(() => {
-        setCurrent(rawData);
 
-        form.setFieldsValue({
-            'textarea': current.text
-        });
+        if (visible) {
+            form.setFieldsValue({
+                'publication': current?.content || current?.text
+            });
+        }
 
         // eslint-disable-next-line
-    }, [rawData])
+    }, [visible])
 
-    const onFinish = () => {
-        if (type === 'edit-publication') {
+    const onFinish = async (event) => {
+        setIsLoading(true);
+        const provider = (current?.type === 'edit-publication' ? editPublication : editComment);
+        const onEvent = (current?.type === 'edit-publication' ? onEditPublication : onEditComment);
 
-        }
+        const successPublication = await provider({
+            ...(current?.type === 'edit-publication' ? { _id: current?._id } : { ...current }),
+            ownerId: user?._id,
+            content: event?.publication
+        });
 
-        if (type === 'edit-comment') {
+        form.setFieldsValue({
+            publication: ''
+        });
 
-        }
+        setIsLoading(false);
+
+        onEvent({ ...successPublication[0], type: current?.type });
+        toast.success(i18n.t(successPublication?.text), {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+        onClose();
     }
 
     return (
-        <Modal centered>
+        <Modal centered visible={visible} footer={false} onCancel={onClose}>
             <Form form={form} onFinish={onFinish}>
-                <Form.Item name="textarea" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
+                <Form.Item name="publication" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
                     <TextArea placeholder={i18n.t(placeholder)} allowClear autoSize={{ minRows: 1, maxRows: 5 }} />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">{i18n.t('button.publication.label.publication')}</Button>
+                    <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
                 </Form.Item>
             </Form>
         </Modal>
     )
 }
 
-export default ModalCustom;
+const mapStateToProps = ({ user }) => ({ user });
+export default connect(mapStateToProps)(ModalCustom);

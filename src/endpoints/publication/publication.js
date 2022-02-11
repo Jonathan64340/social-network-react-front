@@ -37,7 +37,7 @@ export function addComment(data) {
 
 export function editComment(data) {
     return axios
-        .patch(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment?action=edit`, data)
+        .patch(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/publication/comment/edit/${data?._id}`, data)
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }

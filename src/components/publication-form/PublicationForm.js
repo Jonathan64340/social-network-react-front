@@ -12,18 +12,10 @@ const PublicationForm = ({ user, onCreate, onEdit, current }) => {
 
     const [form] = Form.useForm();
 
-    useEffect(() => {
-        form.setFieldsValue({
-            publication: current?.content
-        })
-        // eslint-disable-next-line
-    }, [current]);
-
-
     const onSubmit = async (event) => {
         setIsLoading(true);
-        const provider = (current ? editPublication : createPublication);
-        const onEvent = (current ? onEdit : onCreate);
+        const provider = createPublication;
+        const onEvent = onCreate;
         const successPublication = await provider({
             ...(current && { _id: current?._id }),
             ownerId: user?._id,

@@ -6,12 +6,14 @@ import PublicationForm from '../components/publication-form/PublicationForm';
 import PublicationDetail from '../components/publication-detail/PublicationDetail';
 import { getPublication } from '../endpoints/publication/publication';
 import HeaderToolbar from '../components/header/HeaderToolbar';
+import Modal from '../components/modal/Modal';
 const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user }) => {
     const [publication, setPublication] = useState([]);
     const [current, setCurrent] = useState(false);
     const [scrollListener, setScrollListener] = useState(null);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
@@ -40,6 +42,10 @@ const Dashboard = ({ user }) => {
 
     }, [user?.isLogged, user?._id]);
 
+    const onCloseModal = () => {
+        setVisible(false);
+    }
+
     const onDelete = (id) => {
         setPublication(publication.filter(_publication => _publication?._id !== id && _publication))
     }
@@ -52,18 +58,33 @@ const Dashboard = ({ user }) => {
 
     const onEdit = async (payload) => {
         if (payload !== {}) {
+            setVisible(true);
             setCurrent({ ...payload });
         }
     }
 
     const handleEdit = async (payload) => {
         if (payload !== {} || payload?._id) {
-            const _publication = (publication.length > 1 ? publication.reverse() : publication);
-            const index = _publication.findIndex(tmpPub => tmpPub?._id !== payload?._id && tmpPub);
-            const tmp = _publication.reverse();
-            tmp[_publication.length > 1 ? index : 0] = { ...payload };
-            setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
-            setCurrent(false);
+            if (payload?.type === 'edit-publication') {
+                delete payload?.type;
+                const _publication = (publication.length > 1 ? publication.reverse() : publication);
+                const index = _publication.findIndex(tmpPub => tmpPub?._id === payload?._id && tmpPub);
+                const tmp = _publication;
+                tmp[_publication.length > 1 ? index : 0] = { ...tmp[_publication.length > 1 ? index : 0], ...payload };
+                setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
+                setCurrent(false);
+            } else {
+                delete payload?.type;
+                const _publication = publication;
+                const index = _publication.findIndex(tmpPub => tmpPub?._id === payload?.publicationId && tmpPub); // publication
+                const tmp = _publication;
+
+                const indexComment = tmp[publication.length > 1 ? index : 0]?.comments?.data.findIndex(tmpCom => tmpCom?._id === payload?._id && tmpCom); // comment
+                tmp[publication.length > 1 ? index : 0].comments.data[indexComment] = { ...tmp[publication.length > 1 ? index : 0].comments.data[indexComment], ...payload }
+               
+                setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
+                setCurrent(false);
+            }
         }
     }
 
@@ -138,7 +159,7 @@ const Dashboard = ({ user }) => {
             <Layout hasSider className="dashboard-container">
                 <Content>
                     <HeaderCustom user={user} />
-                    <PublicationForm onCreate={onCreate} current={current} onEdit={handleEdit} />
+                    <PublicationForm onCreate={onCreate} onEdit={handleEdit} />
                     {publication.map((_publication, index) => (<PublicationDetail
                         content={_publication?.content}
                         time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
@@ -146,10 +167,12 @@ const Dashboard = ({ user }) => {
                         onDelete={onDelete}
                         onDeleteComment={onDeleteComment}
                         onCreateComment={onCreateComment}
-                        onEdit={onEdit}
+                        onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
+                        onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
                         rawData={_publication}
                         key={index}
                     />))}
+                    <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
                 </Content>
             </Layout>
             <Footer></Footer>

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 const { TextArea } = Input;
 
-const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) => {
+const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onEditComment }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -16,7 +16,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
         const comment = await addComment({
             publicationId: rawData?._id,
             ownerId: user?._id,
-            text: values?.comment
+            content: values?.comment
         });
 
         onCreateComment({ ...comment[0] });
@@ -33,9 +33,9 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
         onDeleteComment({ publicationId: rawData?._id, commentId: id });
     }
 
-    const menu = (id, ownerId) =>
+    const menu = (id, ownerId, _rawData) =>
     (<Menu>
-        {user?._id === ownerId && <Menu.Item key="edit" icon={<EditOutlined />}>
+        {user?._id === ownerId && <Menu.Item key="edit" onClick={() => onEditComment({ ..._rawData })} icon={<EditOutlined />}>
             {i18n.t('button.publication.label.edit')}
         </Menu.Item>}
         <Popconfirm
@@ -60,9 +60,9 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment }) =
                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                         title={<div className="meta-container">
                             <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
-                            {(user?._id === item?.ownerId || user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu(item?._id, item?.ownerId)} icon={<MoreOutlined />} type="text" />}
+                            {(user?._id === item?.ownerId || user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu(item?._id, item?.ownerId, item)} icon={<MoreOutlined />} type="text" />}
                         </div>}
-                        description={<p>{item.text}</p>}
+                        description={<p>{item.content}</p>}
                     />
                 </List.Item>
             )}>

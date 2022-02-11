@@ -9,11 +9,11 @@ import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, time, onEdit, rawData }) => {
+const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData }) => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
-                onEdit({ ...rawData });
+                onEdit({ ...rawData, type: 'edit-publication' });
                 break;
 
             case 'delete':
@@ -77,7 +77,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
         }
         >
             <p>{content}</p>
-            <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} />
+            <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />
         </Card>
     );
 }
