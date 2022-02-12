@@ -4,7 +4,6 @@ import i18n from '../../i18n';
 import { momentCustom as moment } from '../../_helper/moment_custom';
 import { Card, Avatar, Menu, Popconfirm, Dropdown } from 'antd';
 import { deletePublication } from '../../endpoints/publication/publication';
-// import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
 const { Meta } = Card;
@@ -26,15 +25,6 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
     const confirm = async () => {
         await deletePublication(id)
         onDelete(id);
-        // return toast.success(i18n.t('publication.notification.delete.success'), {
-        //     position: "top-right",
-        //     autoClose: 5000,
-        //     hideProgressBar: false,
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //     progress: undefined,
-        // });
     }
 
     const menu = (

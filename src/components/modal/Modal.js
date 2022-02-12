@@ -3,7 +3,6 @@ import { Modal, Form, Button, Input } from 'antd';
 import i18n from '../../i18n';
 import { editPublication, editComment } from '../../endpoints/publication/publication';
 import { connect } from 'react-redux';
-// import { toast } from 'react-toastify';
 
 
 const ModalCustom = ({ placeholder, current, visible, onClose, onEditPublication, onEditComment, user }) => {
@@ -41,15 +40,7 @@ const ModalCustom = ({ placeholder, current, visible, onClose, onEditPublication
         setIsLoading(false);
 
         onEvent({ ...successPublication[0], type: current?.type });
-        // toast.success(i18n.t(successPublication?.text), {
-        //     position: "top-right",
-        //     autoClose: 5000,
-        //     hideProgressBar: false,
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //     progress: undefined,
-        // });
+  
         onClose();
     }
 

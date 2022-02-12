@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Form, Button } from 'antd';
 import i18n from '../../i18n';
-import { createPublication, editPublication } from '../../endpoints/publication/publication';
-// import { toast } from 'react-toastify';
+import { createPublication } from '../../endpoints/publication/publication';
 import { connect } from 'react-redux';
 
 const { TextArea } = Input;
@@ -29,22 +28,13 @@ const PublicationForm = ({ user, onCreate, onEdit, current }) => {
         setIsLoading(false);
 
         onEvent({ ...successPublication[0] });
-        // toast.success(i18n.t(successPublication?.text), {
-        //     position: "top-right",
-        //     autoClose: 5000,
-        //     hideProgressBar: false,
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //     progress: undefined,
-        // });
     }
 
     return <div className="publication-form-container">
         <Form onFinish={onSubmit} form={form}>
             <Form.Item name="publication"
                 rules={[{ required: true, message: i18n.t('form.required.text') }]}>
-                <TextArea  className="textarea-no-border" placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear />
+                <TextArea className="textarea-no-border" placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
