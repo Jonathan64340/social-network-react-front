@@ -47,7 +47,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
     );
 
     return (
-        <Card cover={
+        <Card className="meta-card" cover={
             <>
                 <Meta
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}

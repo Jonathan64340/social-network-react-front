@@ -3,6 +3,7 @@ import { Input, Form, Button, List, Avatar, Dropdown, Menu, Popconfirm } from 'a
 import { MoreOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { addComment, deleteComment } from '../../endpoints/publication/publication';
 import i18n from '../../i18n';
+import { momentCustom as moment } from '../../_helper/moment_custom';
 import { connect } from 'react-redux';
 
 const { TextArea } = Input;
@@ -56,13 +57,24 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
         <List dataSource={rawData?.comments?.data}
             renderItem={(item) => (
                 <List.Item>
+                    {console.log(item)}
                     <List.Item.Meta
                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                         title={<div className="meta-container">
                             <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
                             {(user?._id === item?.ownerId || user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu(item?._id, item?.ownerId, item)} icon={<MoreOutlined />} type="text" />}
                         </div>}
-                        description={<p>{item.content}</p>}
+                        description={
+                            <div className="meta-content-description">
+                                <div className="meta-description">
+                                    <small>
+                                        {item?.createdAt === item?.modifiedAt ?
+                                            moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })
+                                            : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
+                                    </small>
+                                </div>
+                                <p>{item.content}</p>
+                            </div>}
                     />
                 </List.Item>
             )}>

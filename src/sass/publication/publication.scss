@@ -3,6 +3,14 @@
     max-width: 1000px;
     margin: auto;
 
+    .meta-card .ant-card-body {
+        padding: 10px 20px;
+
+        p {
+            font-size: 0.8rem;;
+        }
+    }
+
     .ant-card.ant-card-bordered {
         padding: 20px;
         border-radius: 10px;
@@ -15,9 +23,20 @@
             width: 100%;
         }
 
+        .meta-content-description {
+            position: relative;
+            top: 5px;
+            p {
+                position: relative;
+                top: -10px;
+                font-size: 0.8rem;
+                color: $secondary-color;
+            }
+        }
+
         .meta-description {
             position: relative;
-            top: -10px;
+            top: -20px;
         }
 
         .comment-component-container {
