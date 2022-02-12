@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const { TextArea } = Input;
 
-const PublicationForm = ({ user, onCreate, onEdit, current }) => {
+const PublicationForm = ({ user, onCreate, current }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [form] = Form.useForm();
