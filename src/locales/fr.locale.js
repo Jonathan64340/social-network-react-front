@@ -55,6 +55,12 @@ export const fr =  {
                     "edit": "Editer",
                     "delete": "Supprimer"
                 }
+            },
+            "tooltip": {
+                "label": {
+                    "like": "J'aime",
+                    "share": "Partager"
+                }
             }
         },
         "publication": {

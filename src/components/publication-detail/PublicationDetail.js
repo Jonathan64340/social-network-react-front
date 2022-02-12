@@ -1,8 +1,8 @@
 import React from 'react';
-import { MoreOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { MoreOutlined, EditOutlined, DeleteOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
 import i18n from '../../i18n';
 import { momentCustom as moment } from '../../_helper/moment_custom';
-import { Card, Avatar, Menu, Popconfirm, Dropdown } from 'antd';
+import { Card, Avatar, Menu, Popconfirm, Dropdown, Tooltip } from 'antd';
 import { deletePublication } from '../../endpoints/publication/publication';
 import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
@@ -53,7 +53,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={<div className="meta-container">
                         <span>{rawData?.user?.username}</span>
-                        {(user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu} icon={<MoreOutlined />} type="text" />}
+                        {(user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu} icon={<MoreOutlined />} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>}
                     </div>}
                     description={<div className="meta-description">
                         <small>

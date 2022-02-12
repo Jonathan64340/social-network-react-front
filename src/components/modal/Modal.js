@@ -45,7 +45,7 @@ const ModalCustom = ({ placeholder, current, visible, onClose, onEditPublication
     }
 
     return (
-        <Modal centered visible={visible} footer={false} onCancel={onClose}>
+        <Modal centered visible={visible} footer={false} onCancel={onClose} closable={false} closeIcon={false} maskClosable={false}>
             <Form form={form} onFinish={onFinish}>
                 <Form.Item name="publication" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
                     <TextArea placeholder={i18n.t(placeholder)} allowClear autoSize={{ minRows: 1, maxRows: 5 }} />

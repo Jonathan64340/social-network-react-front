@@ -19,8 +19,24 @@ textarea {
     }
 }
 
+.ant-input-affix-wrapper-textarea-with-clear-btn {
+    border-radius: 10px !important;
+}
+
 textarea-no-border {
     span:first-child {
         border-radius: 10px !important;
     }
+}
+
+/** INPUT **/
+.ant-form-item-control-input-content input,.ant-input-password {
+    border-radius: 10px !important;
+}
+
+/** MODAL **/
+.ant-modal-content {
+    background: $color-white-modal;
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
 }
