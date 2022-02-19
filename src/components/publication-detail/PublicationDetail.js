@@ -53,7 +53,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={<div className="meta-container">
                         <span>{rawData?.user?.username}</span>
-                        {(user?._id === rawData?.ownerId) && <Dropdown.Button trigger={['click']} overlay={menu} icon={<MoreOutlined />} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>}
+                        <Dropdown.Button trigger={['click']} overlay={user?._id === rawData?.ownerId ? menu : <Menu />} icon={user?._id === rawData?.ownerId ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>
                     </div>}
                     description={<div className="meta-description">
                         <small>
