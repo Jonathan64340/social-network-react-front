@@ -12,6 +12,18 @@
         backdrop-filter: blur(6px);
     }
 
+    .list-friend {
+        left: 50px;
+        position: fixed;
+        z-index: 1;
+        width: 280px;
+        top: 50px;
+        background: $color-header-toolbar-light-opacity-0-5;
+        padding: 10px;
+        backdrop-filter: blur(6px);
+        border-radius: 10px;
+    }
+
     .header-toolbar-container {
         display: flex;
         align-items: center;
@@ -32,7 +44,7 @@
 
             .search-toolbar-input {
                 width: 280px;
-                
+
                 input {
                     font-size: 0.6rem;
                 }

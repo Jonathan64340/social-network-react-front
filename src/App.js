@@ -49,6 +49,10 @@ const App = ({ ...props }) => {
         {
             path: '/',
             component: Dashboard
+        },
+        {
+            path: '/profile/:id',
+            component: Dashboard
         }
     ]
 

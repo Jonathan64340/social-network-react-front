@@ -5,3 +5,15 @@ export async function getMe() {
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
+
+export async function getUserList(query) {
+    return axios.get(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/user-list?query=${query}`)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}
+
+export async function getUser(id) {
+    return axios.get(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/user?id=${id}`)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}

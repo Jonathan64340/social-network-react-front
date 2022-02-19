@@ -7,11 +7,14 @@ import PublicationDetail from '../components/publication-detail/PublicationDetai
 import { getPublication } from '../endpoints/publication/publication';
 import HeaderToolbar from '../components/header/HeaderToolbar';
 import Modal from '../components/modal/Modal';
+import { withRouter } from 'react-router-dom';
+import _ from 'underscore';
 const { Content, Header, Footer } = Layout;
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, ...props }) => {
     const [publication, setPublication] = useState([]);
     const [current, setCurrent] = useState(false);
+    const [viewUser, setViewUser] = useState(false);
     const [scrollListener, setScrollListener] = useState(null);
     const [visible, setVisible] = useState(false);
 
@@ -32,15 +35,20 @@ const Dashboard = ({ user }) => {
     }, [scrollListener])
 
     useEffect(() => {
+        if (props?.match?.params?.id) {
+            setViewUser(props?.match?.params?.id);
+        }
+    }, [props?.match?.params?.id])
 
-        if (user?.isLogged && user?._id) {
-            getPublication({ _id: user?._id })
+    useEffect(() => {
+
+        if ((user?.isLogged && user?._id && viewUser) || (user?.isLogged && user?._id)) {
+            getPublication({ _id: viewUser || user?._id })
                 .then(result => {
                     setPublication(result);
                 })
         }
-
-    }, [user?.isLogged, user?._id]);
+    }, [user?.isLogged, user?._id, viewUser]);
 
     const onCloseModal = () => {
         setVisible(false);
@@ -158,7 +166,7 @@ const Dashboard = ({ user }) => {
             </Header>
             <Layout hasSider className="dashboard-container">
                 <Content>
-                    <HeaderCustom user={user} />
+                    <HeaderCustom user={user} viewUser={viewUser} />
                     <PublicationForm onCreate={onCreate} onEdit={handleEdit} />
                     {publication.map((_publication, index) => (<PublicationDetail
                         content={_publication?.content}
@@ -181,4 +189,4 @@ const Dashboard = ({ user }) => {
 }
 
 const mapStateToProps = ({ user }) => ({ user });
-export default connect(mapStateToProps)(Dashboard);
+export default _.compose(connect(mapStateToProps), withRouter)(Dashboard);
