@@ -13,12 +13,13 @@ const HeaderToolbar = ({ user, ...props }) => {
         if (!query.length) return setListUser([]);
         getUserList(query)
             .then(res => {
-                setListUser(res);
+                setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
             })
             .catch(err => console.log(err))
     }
 
     const goToUserProfile = (id) => {
+        setListUser([]);
         props.history.push(`/profile/${id}`);
     }
 
