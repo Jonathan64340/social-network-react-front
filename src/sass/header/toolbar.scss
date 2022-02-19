@@ -2,14 +2,14 @@
     display: flex;
     margin: 0;
     padding: 0;
+    background: $color-header-toolbar-blue;
     &.sticky {
         position: fixed;
         width: 100%;
         z-index: 100;
         box-shadow: 0 0 10px $color-show-toolbar-black;
         animation: toolbar-smooth-in ease-in-out 0.3s;
-        background: #eaeaf5ad;
-        backdrop-filter: blur(6px);
+        background: $color-header-toolbar-blue;
     }
 
     .list-friend {
@@ -17,10 +17,16 @@
         z-index: 1;
         width: 280px;
         top: 63.5px;
-        background: $color-header-toolbar-light-opacity-0-5;
+        background: $color-header-toolbar-blue;
         padding: 10px;
-        backdrop-filter: blur(6px);
         border-radius: 0 0 10px 10px;
+        .ant-list-item {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
     }
 
     .header-toolbar-container {
@@ -46,6 +52,9 @@
 
                 input {
                     font-size: 0.6rem;
+                    &::placeholder {
+                        font-size: 0.6rem;
+                      }
                 }
             }
         }
@@ -62,6 +71,7 @@
 
             span:first-child {
                 margin-right: 8px;
+                cursor: pointer;
             }
         }
     }
