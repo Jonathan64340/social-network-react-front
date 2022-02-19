@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
 import { connect } from 'react-redux';
 
-const HeaderToolbar = ({ user , ...props}) => {
+const HeaderToolbar = ({ user, ...props }) => {
     const [listUser, setListUser] = useState([]);
     const onSearch = (query) => {
         if (!query.length) return setListUser([]);
@@ -27,6 +27,19 @@ const HeaderToolbar = ({ user , ...props}) => {
             <div className="header-toolbar-container">
                 <div className="search">
                     <AutoComplete placeholder={i18n.t('toolbar.search.text')} className="search-toolbar-input" onSearch={onSearch} enterButton allowClear />
+                    {listUser.length ? <List dataSource={listUser}
+                        className="list-friend"
+                        renderItem={(item) => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" size="small" />}
+                                    title={<div className="meta-container" onClick={() => goToUserProfile(item?._id)}>
+                                        <span>{item?.username}</span>
+                                    </div>}
+                                />
+                            </List.Item>
+                        )}>
+                    </List> : ''}
                 </div>
                 <div className="header-toolbar-right-container">
                     <Button type="text" size="middle">
@@ -40,19 +53,6 @@ const HeaderToolbar = ({ user , ...props}) => {
                     </div>
                 </div>
             </div>
-            {listUser.length ? <List dataSource={listUser}
-            className="list-friend"
-                renderItem={(item) => (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" size="small" />}
-                            title={<div className="meta-container" onClick={() => goToUserProfile(item?._id)}>
-                                <span>{item?.username}</span>
-                            </div>}
-                        />
-                    </List.Item>
-                )}>
-            </List> : ''}
         </>
     )
 };

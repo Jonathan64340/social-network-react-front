@@ -166,7 +166,7 @@ const Dashboard = ({ user, ...props }) => {
             </Header>
             <Layout hasSider className="dashboard-container">
                 <Content>
-                    <HeaderCustom user={user} viewUser={viewUser} />
+                    <HeaderCustom user={user} />
                     <PublicationForm onCreate={onCreate} onEdit={handleEdit} />
                     {publication.map((_publication, index) => (<PublicationDetail
                         content={_publication?.content}

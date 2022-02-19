@@ -13,15 +13,14 @@
     }
 
     .list-friend {
-        left: 50px;
-        position: fixed;
+        position: absolute;
         z-index: 1;
         width: 280px;
-        top: 50px;
+        top: 63.5px;
         background: $color-header-toolbar-light-opacity-0-5;
         padding: 10px;
         backdrop-filter: blur(6px);
-        border-radius: 10px;
+        border-radius: 0 0 10px 10px;
     }
 
     .header-toolbar-container {

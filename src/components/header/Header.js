@@ -15,7 +15,7 @@ const Header = ({ user, ...props }) => {
         .catch(() => setViewUser(false))
       }
       // eslint-disable-next-line
-  }, [])
+  }, [props?.match?.params?.id])
 
   return <div className="header-container">
     <div className="header-container-background-cover" style={{
