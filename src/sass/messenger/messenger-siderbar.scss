@@ -1,0 +1,86 @@
+.online-tick {
+    position: absolute;
+    border-radius: 50%;
+    left: 16px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    background-color: $online-status;
+}
+
+.busy-tick {
+    position: absolute;
+    border-radius: 50%;
+    left: 16px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    background-color: $busy-status;
+}
+
+.open-conversation-container {
+    bottom: calc(100vh - 90vh);
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.messenger-sidebar {
+    border: 1px solid #DEDEDE;
+    border-top: none;
+    .friend-list {
+        height: calc(100vh - 135px);
+        overflow: auto;
+        position: relative;
+        .friend-item {
+            position: relative;
+            padding: 16px 16px 16px 16px;
+            border-bottom: 1px solid $color-header-toolbar-primary;
+            &:hover {
+                cursor: pointer;
+                background-color: $color-medium-black;
+            }
+            .online-tick {
+                top: 35px;
+                left: 35px;
+                z-index: 100;
+                width: 14px;
+                height: 14px;
+                border: 2px solid $color-light-white;
+            }
+            .busy-tick {
+                top: 35px;
+                left: 35px;
+                z-index: 100;
+                width: 14px;
+                height: 14px;
+                border: 2px solid $color-light-white;
+            }
+            &-avatar {
+                width: 30px;
+                height: 30px;
+                border: 3px solid $color-light-black;
+                box-shadow: 0 0 2px black;
+                margin-right: 6px;
+            }
+        }
+    }
+    &-friend-search {
+        position: absolute;
+        bottom: calc(100vh - 81.7vh);
+        width: 100%;
+        border-top: 1px solid #DEDEDE;
+        &-input {
+            border: none;
+        }
+    }
+    &-friend-btn {
+        border-top: 1px solid #DEDEDE;
+        width: 100%;
+        position: absolute;
+        padding: 16px 16px 16px 30px;
+        bottom: calc(100vh - 90vh);
+    }
+}

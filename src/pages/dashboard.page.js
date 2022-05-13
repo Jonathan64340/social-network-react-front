@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import HeaderCustom from '../components/header/Header';
@@ -9,6 +9,8 @@ import HeaderToolbar from '../components/header/HeaderToolbar';
 import Modal from '../components/modal/Modal';
 import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
+import MessengerSidebar from '../components/messenger-sidebar/MessengerSidebar';
+import { Emitter } from '../utils/emitter';
 const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user, ...props }) => {
@@ -17,21 +19,31 @@ const Dashboard = ({ user, ...props }) => {
     const [viewUser, setViewUser] = useState(false);
     const [scrollListener, setScrollListener] = useState(null);
     const [visible, setVisible] = useState(false);
+    const conversationContainer = useRef();
+
+    useEffect(() => {
+        const openNewConversation = Emitter.subscribe(event => console.log(event));
+        // To destroy listenner on unmount
+        return () => {
+            openNewConversation && openNewConversation.unsubscribe();
+        }
+    }, [])
 
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
+
         setScrollListener(window.addEventListener('scroll', () => {
-            if (window?.scrollY >= 64) {
+            if (window?.scrollY >= 0) {
                 headerRef?.classList?.add('sticky');
             } else {
                 headerRef?.classList?.remove('sticky');
             }
+            // To destroy listenner on unmount
+            return () => {
+                scrollListener && scrollListener.removeEventListener();
+            }
         }));
 
-        // To destroy listenner on unmount
-        return () => {
-            scrollListener && scrollListener.removeEventListener();
-        }
     }, [scrollListener])
 
     useEffect(() => {
@@ -89,7 +101,7 @@ const Dashboard = ({ user, ...props }) => {
 
                 const indexComment = tmp[publication.length > 1 ? index : 0]?.comments?.data.findIndex(tmpCom => tmpCom?._id === payload?._id && tmpCom); // comment
                 tmp[publication.length > 1 ? index : 0].comments.data[indexComment] = { ...tmp[publication.length > 1 ? index : 0].comments.data[indexComment], ...payload }
-               
+
                 setPublication([...tmp.reverse()].sort((a, b) => a.createdAt < b.createdAt ? 1 : -1));
                 setCurrent(false);
             }
@@ -165,6 +177,9 @@ const Dashboard = ({ user, ...props }) => {
                 <HeaderToolbar />
             </Header>
             <Layout hasSider className="dashboard-container">
+                <Layout.Sider>
+                    <MessengerSidebar />
+                </Layout.Sider>
                 <Content>
                     <HeaderCustom user={user} />
                     <PublicationForm onCreate={onCreate} onEdit={handleEdit} />
@@ -180,8 +195,12 @@ const Dashboard = ({ user, ...props }) => {
                         rawData={_publication}
                         key={index}
                     />))}
+                    <div className='open-conversation-container' ref={conversationContainer}></div>
                     <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
                 </Content>
+                <Layout.Sider>
+                    <MessengerSidebar display='friend' />
+                </Layout.Sider>
             </Layout>
             <Footer></Footer>
         </>

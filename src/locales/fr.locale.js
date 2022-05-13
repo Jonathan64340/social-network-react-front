@@ -38,6 +38,11 @@ export const fr =  {
             },
             "publication": {
                 "placeholder": "Publier quelque chose qui vous intéresse."
+            },
+            "messenger": {
+                "input": {
+                    "search_friend": "Rechercher un ami"
+                }
             }
         },
         "button": {

@@ -1,47 +1,50 @@
-.dashboard-container .ant-layout-content {
-    padding: 0 50px;
-    max-width: 1000px;
-    margin: auto;
-
-    .meta-card .ant-card-body {
-        padding: 10px 20px;
-
-        p {
-            font-size: 0.8rem;;
-        }
-    }
-
-    .ant-card.ant-card-bordered {
-        padding: 20px;
-        border-radius: 10px;
-        margin: 10px 0;
-
-        .meta-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .meta-content-description {
-            position: relative;
-            top: 5px;
+.dashboard-container {
+    padding-top: 64px;
+    .ant-layout-content {
+        padding: 0 50px;
+        max-width: 1000px;
+        margin: auto;
+    
+        .meta-card .ant-card-body {
+            padding: 10px 20px;
+    
             p {
-                position: relative;
-                top: -10px;
-                font-size: 0.8rem;
-                color: $secondary-color;
+                font-size: 0.8rem;;
             }
         }
-
-        .meta-description {
-            position: relative;
-            top: -20px;
+    
+        .ant-card.ant-card-bordered {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+    
+            .meta-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+    
+            .meta-content-description {
+                position: relative;
+                top: 5px;
+                p {
+                    position: relative;
+                    top: -10px;
+                    font-size: 0.8rem;
+                    color: $secondary-color;
+                }
+            }
+    
+            .meta-description {
+                position: relative;
+                top: -20px;
+            }
+    
+            .comment-component-container {
+                
+            }
+    
         }
-
-        .comment-component-container {
-            
-        }
-
     }
 }

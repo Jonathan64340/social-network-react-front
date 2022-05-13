@@ -42,6 +42,10 @@ const App = ({ ...props }) => {
         {
             path: '/register',
             component: RegisterPage
+        },
+        {
+            path: '/publication/:id',
+            component: Dashboard
         }
     ];
 

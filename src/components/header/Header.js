@@ -12,9 +12,12 @@ const Header = ({ user, ...props }) => {
     if (props?.match?.params?.id) {
       getUser(props?.match?.params?.id)
         .then(data => setViewUser(data))
-        .catch(() => setViewUser(false))
-      }
-      // eslint-disable-next-line
+        .catch(() => {
+          props?.history?.push('/not_found');
+          setViewUser(false)
+        })
+    }
+    // eslint-disable-next-line
   }, [props?.match?.params?.id])
 
   return <div className="header-container">
@@ -27,8 +30,10 @@ const Header = ({ user, ...props }) => {
           <span>{_viewUser?.username || user?.username}</span>
         </div>
         <div className="header-container-btn-group">
-          <Button type="primary" size="small">{i18n.t('common.action.message.text')}</Button>
-          <Button type="primary" size="small">{i18n.t('common.action.friend_request_send')}</Button>
+          {props?.match?.params?.id && (<>
+            <Button type="primary" size="small">{i18n.t('common.action.message.text')}</Button>
+            <Button type="primary" size="small">{i18n.t('common.action.friend_request_send')}</Button>
+          </>)}
         </div>
       </div>
     </div>

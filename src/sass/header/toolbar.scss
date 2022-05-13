@@ -2,14 +2,13 @@
     display: flex;
     margin: 0;
     padding: 0;
-    background: $color-header-toolbar-blue;
+    background: $color-header-toolbar-primary;
     &.sticky {
         position: fixed;
         width: 100%;
         z-index: 100;
         box-shadow: 0 0 10px $color-show-toolbar-black;
-        animation: toolbar-smooth-in ease-in-out 0.3s;
-        background: $color-header-toolbar-blue;
+        background: $color-header-toolbar-primary;
     }
 
     .list-friend {
@@ -17,7 +16,7 @@
         z-index: 1;
         width: 280px;
         top: 63.5px;
-        background: $color-header-toolbar-blue;
+        background: $color-header-toolbar-primary;
         padding: 10px;
         border-radius: 0 0 10px 10px;
         .ant-list-item {
@@ -74,14 +73,5 @@
                 cursor: pointer;
             }
         }
-    }
-}
-
-@keyframes toolbar-smooth-in {
-    0% {
-        top: -64px;
-    }
-    100% {
-        top: 0;
     }
 }

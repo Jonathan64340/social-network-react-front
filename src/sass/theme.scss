@@ -40,3 +40,11 @@ textarea-no-border {
     backdrop-filter: blur(6px);
     border-radius: 20px;
 }
+
+/** SIDERBER **/
+.siderbar {
+    min-height: 100vh;
+    background-color: $color-light-white;
+    position: fixed;
+    width: 100%;
+}
