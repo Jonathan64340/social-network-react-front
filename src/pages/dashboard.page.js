@@ -22,10 +22,12 @@ const Dashboard = ({ user, ...props }) => {
 
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
+        const siderMessenger = document.querySelector('.sider-messenger');
 
         setScrollListener(window.addEventListener('scroll', () => {
             if (window?.scrollY >= 0) {
                 headerRef?.classList?.add('sticky');
+                siderMessenger?.classList.add('sider-sticky');
             } else {
                 headerRef?.classList?.remove('sticky');
             }
@@ -189,7 +191,7 @@ const Dashboard = ({ user, ...props }) => {
                     <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
                     <MessengerChat />
                 </Content>
-                <Layout.Sider>
+                <Layout.Sider className='sider-messenger'>
                     <MessengerSidebar display='friend' />
                 </Layout.Sider>
             </Layout>
