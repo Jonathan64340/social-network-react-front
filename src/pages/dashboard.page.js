@@ -23,13 +23,17 @@ const Dashboard = ({ user, ...props }) => {
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
         const siderMessenger = document.querySelector('.sider-messenger');
+        const dashboardContainer = document.querySelector('.dashboard-container');
 
         setScrollListener(window.addEventListener('scroll', () => {
             if (window?.scrollY >= 0) {
                 headerRef?.classList?.add('sticky');
-                siderMessenger?.classList.add('sider-sticky');
+                siderMessenger?.classList.add('sticky');
+                dashboardContainer?.classList?.add('sticky');
             } else {
                 headerRef?.classList?.remove('sticky');
+                dashboardContainer?.classList?.remove('sticky');
+                siderMessenger?.classList?.remove('sticky');
             }
             // To destroy listenner on unmount
             return () => {
