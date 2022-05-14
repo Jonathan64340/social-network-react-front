@@ -1,4 +1,4 @@
-import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
+import { CloseSquareOutlined, MinusOutlined, FullscreenOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { EventEmitter } from '../../utils/emitter';
@@ -17,14 +17,14 @@ const MessengerChat = () => {
     }, [])
 
     const MessengerChatItem = ({ id, name }) => {
-        return (<div className='messenger-chat-item-container'>
+        return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} open="true">
             <div className='messenger-chat-item-header'>
                 <div className='messenger-chat-item-header-title'>
                     <span>{name}</span>
                 </div>
                 <div className='messenger-chat-item-header-action'>
                     <div className='messenger-chat-item-header-action-minimize'>
-                        <MinusOutlined />
+                        <MinusOutlined onClick={(element) => legateCurrentStatusOpener(element)} />
                     </div>
                     <div className='messenger-chat-item-header-action-close' onClick={() => closeConversation({ id })}>
                         <CloseSquareOutlined />
@@ -50,6 +50,30 @@ const MessengerChat = () => {
             viewedConversations = viewedConversations.filter(j => j !== id);
             setJsxElements(jsx => [...jsx.filter(j => j.id !== id)])
         }
+    }
+
+    const minimizeConversation = ({ id }) => {
+        if (viewedConversations.includes(id)) {
+            const conversationItem = document.getElementById(`conversation-item-${id}`);
+            conversationItem.style.height = '30px';
+        }
+    }
+
+    const maximizeConversation = ({ id }) => {
+        if (viewedConversations.includes(id)) {
+            const conversationItem = document.getElementById(`conversation-item-${id}`);
+            conversationItem.style.height = '300px';
+        }
+    }
+
+    const legateCurrentStatusOpener = ({ target }) => {
+        const conversationItemElement = target.parentNode.parentNode.parentNode.parentNode.parentNode;
+        console.log(conversationItemElement.open, conversationItemElement.id)
+        const func = () =>
+            conversationItemElement.open ?
+                minimizeConversation({ id: conversationItemElement.id }) :
+                maximizeConversation({ id: conversationItemElement.id })
+        func();
     }
 
     return <div className='open-conversation-container'>{jsxElements.map((item, index) => (<item.component key={index} />))}</div>
