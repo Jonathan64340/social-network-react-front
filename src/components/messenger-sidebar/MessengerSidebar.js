@@ -1,10 +1,10 @@
 import { Avatar, Input } from 'antd';
 import React, { useState } from 'react';
 import i18n from '../../i18n';
-import { Emitter } from '../../utils/emitter';
+import { EventEmitter } from '../../utils/emitter';
 
 const MessengerSidebar = ({ display }) => {
-    const [friendList] = useState([{ name: 'Silver', status: 'online' }, { name: 'Spictor', status: 'busy' }]);
+    const [friendList] = useState([{ id: 1, name: 'Silver', status: 'online' }, { id: 2, name: 'Spictor', status: 'busy' }]);
 
     const renderFriendsItem = () => {
         return (
@@ -22,7 +22,7 @@ const MessengerSidebar = ({ display }) => {
     }
 
     const openConversation = ({ id, name, status }) => {
-        Emitter.next({ type: 'openConversation', data: { name, status }});
+        EventEmitter().emit('openConversation', { id, name, status });
     }
 
     const render = () => {

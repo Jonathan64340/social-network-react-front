@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import HeaderCustom from '../components/header/Header';
@@ -10,7 +10,7 @@ import Modal from '../components/modal/Modal';
 import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
 import MessengerSidebar from '../components/messenger-sidebar/MessengerSidebar';
-import { Emitter } from '../utils/emitter';
+import MessengerChat from '../components/messenger-sidebar/MessengerChat';
 const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user, ...props }) => {
@@ -19,15 +19,6 @@ const Dashboard = ({ user, ...props }) => {
     const [viewUser, setViewUser] = useState(false);
     const [scrollListener, setScrollListener] = useState(null);
     const [visible, setVisible] = useState(false);
-    const conversationContainer = useRef();
-
-    useEffect(() => {
-        const openNewConversation = Emitter.subscribe(event => console.log(event));
-        // To destroy listenner on unmount
-        return () => {
-            openNewConversation && openNewConversation.unsubscribe();
-        }
-    }, [])
 
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
@@ -195,8 +186,8 @@ const Dashboard = ({ user, ...props }) => {
                         rawData={_publication}
                         key={index}
                     />))}
-                    <div className='open-conversation-container' ref={conversationContainer}></div>
                     <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
+                    <MessengerChat />
                 </Content>
                 <Layout.Sider>
                     <MessengerSidebar display='friend' />
