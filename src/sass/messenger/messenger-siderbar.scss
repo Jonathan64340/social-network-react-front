@@ -25,6 +25,7 @@
     margin-right: 200px;
     right: 0;
     display: flex;
+    align-items: flex-end;
     .messenger-chat-item {
         &-container {
             display: flex;
@@ -126,7 +127,7 @@
     }
     &-friend-search {
         position: absolute;
-        bottom: calc(100vh - 81.7vh);
+        bottom: 115px;
         width: 100%;
         border-top: 1px solid #DEDEDE;
         &-input {
@@ -138,6 +139,6 @@
         width: 100%;
         position: absolute;
         padding: 16px 16px 16px 30px;
-        bottom: calc(100vh - 90vh);
+        bottom: 63px;
     }
 }

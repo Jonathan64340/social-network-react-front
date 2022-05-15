@@ -1,4 +1,4 @@
-import { CloseSquareOutlined, MinusOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { EventEmitter } from '../../utils/emitter';
@@ -11,13 +11,13 @@ const MessengerChat = () => {
         const openNewConversation = EventEmitter().subscriber('openConversation', (data) => createNewConversationItem(data));
         // To destroy listenner on unmount
         return () => {
-            openNewConversation && EventEmitter().unsubscriber();
+            openNewConversation && openNewConversation.unsubscribe();
         }
         // eslint-disable-next-line
     }, [])
 
     const MessengerChatItem = ({ id, name }) => {
-        return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} open="true">
+        return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} collapsed={"opened"}>
             <div className='messenger-chat-item-header'>
                 <div className='messenger-chat-item-header-title'>
                     <span>{name}</span>
@@ -52,28 +52,41 @@ const MessengerChat = () => {
         }
     }
 
-    const minimizeConversation = ({ id }) => {
+    const minimizeConversation = ({ id }, element = null) => {
         if (viewedConversations.includes(id)) {
             const conversationItem = document.getElementById(`conversation-item-${id}`);
+            conversationItem.style.position = 'relative';
+            conversationItem.style.bottom = '0';
             conversationItem.style.height = '30px';
+            if (element) {
+                element.setAttribute('collapsed', 'closed')
+            }
         }
     }
 
-    const maximizeConversation = ({ id }) => {
+    const maximizeConversation = ({ id }, element = null) => {
         if (viewedConversations.includes(id)) {
             const conversationItem = document.getElementById(`conversation-item-${id}`);
             conversationItem.style.height = '300px';
+            conversationItem.style.bottom = 0;
+            if (element) {
+                element.setAttribute('collapsed', 'opened')
+            }
         }
     }
 
     const legateCurrentStatusOpener = ({ target }) => {
         const conversationItemElement = target.parentNode.parentNode.parentNode.parentNode.parentNode;
-        console.log(conversationItemElement.open, conversationItemElement.id)
-        const func = () =>
-            conversationItemElement.open ?
-                minimizeConversation({ id: conversationItemElement.id }) :
-                maximizeConversation({ id: conversationItemElement.id })
-        func();
+        const element = document.getElementById(conversationItemElement.id);
+        if (element) {
+            const collapsed = element.getAttribute('collapsed');
+            const id = conversationItemElement.id.split('-').reverse();
+            const func = () =>
+            (collapsed && collapsed === 'opened') ?
+                    minimizeConversation({ id: parseInt(id[0]) }, element) :
+                    maximizeConversation({ id: parseInt(id[0]) }, element)
+            func();
+        }
     }
 
     return <div className='open-conversation-container'>{jsxElements.map((item, index) => (<item.component key={index} />))}</div>
