@@ -8,7 +8,7 @@ import _ from 'underscore';
 
 const { TextArea } = Input;
 
-const PublicationForm = ({ user, onCreate, current, ...props }) => {
+const PublicationForm = ({ user, onCreate, current, canPostOrComment,  ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [form] = Form.useForm();
@@ -33,17 +33,19 @@ const PublicationForm = ({ user, onCreate, current, ...props }) => {
         onEvent({ ...successPublication[0] });
     }
 
-    return <div className="publication-form-container">
-        <Form onFinish={onSubmit} form={form}>
-            <Form.Item name="publication"
-                rules={[{ required: true, message: i18n.t('form.required.text') }]}>
-                <TextArea className="textarea-no-border" placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
-            </Form.Item>
-        </Form>
-    </div>
+    return (<>
+        {(props?.match?.path === "/" || canPostOrComment) ? <div className="publication-form-container">
+            <Form onFinish={onSubmit} form={form}>
+                <Form.Item name="publication"
+                    rules={[{ required: true, message: i18n.t('form.required.text') }]}>
+                    <TextArea className="textarea-no-border" placeholder={i18n.t('form.publication.placeholder')} autoSize={{ minRows: 3, maxRows: 5 }} allowClear />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
+                </Form.Item>
+            </Form>
+        </div> : <></>}
+    </>)
 }
 
 const mapStateToProps = ({ user }) => ({ user });

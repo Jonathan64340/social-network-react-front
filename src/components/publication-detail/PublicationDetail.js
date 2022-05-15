@@ -10,8 +10,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData, ...props }) => {
-    console.log(props?.match)
+const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData, canPostOrComment, ...props }) => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
@@ -70,7 +69,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
         }
         >
             <p>{content}</p>
-            <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />
+            {(props?.match?.path === "/" || canPostOrComment) && <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />}
         </Card>
     );
 }

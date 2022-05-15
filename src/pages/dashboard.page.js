@@ -19,6 +19,7 @@ const Dashboard = ({ user, ...props }) => {
     const [viewUser, setViewUser] = useState(false);
     const [scrollListener, setScrollListener] = useState(null);
     const [visible, setVisible] = useState(false);
+    const [canPostOrComment, setCanPostOrComment] = useState(false);
 
     useEffect(() => {
         const headerRef = document.querySelector('.toolbar-container');
@@ -178,8 +179,8 @@ const Dashboard = ({ user, ...props }) => {
                     <MessengerSidebar />
                 </Layout.Sider>
                 <Content>
-                    <HeaderCustom user={user} />
-                    <PublicationForm onCreate={onCreate} onEdit={handleEdit} />
+                    <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
+                    <PublicationForm onCreate={onCreate} onEdit={handleEdit} canPostOrComment={canPostOrComment} />
                     {publication.map((_publication, index) => (<PublicationDetail
                         content={_publication?.content}
                         time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
@@ -190,6 +191,7 @@ const Dashboard = ({ user, ...props }) => {
                         onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
                         onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
                         rawData={_publication}
+                        canPostOrComment={canPostOrComment}
                         key={index}
                     />))}
                     <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />

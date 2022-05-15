@@ -102,7 +102,12 @@ export const en =  {
                 "message": {
                     "text": "message"
                 },
-                "friend_request_send": "ask as a friend"
+                "friend_request_send": "ask as a friend",
+                "friend_request_pending": "pending friend request",
+                "friend_request_pending_sender": "cancel",
+                "friend_request_pending_receiver_decline": "decline",
+                "friend_request_pending_receiver_accept": "accept",
+                "friend_is_friend": "friend",
             }
         }
     }
