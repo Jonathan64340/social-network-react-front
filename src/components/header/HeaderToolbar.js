@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Avatar, Button, Badge, AutoComplete, List } from 'antd';
 import i18n from '../../i18n';
 import { BellOutlined } from '@ant-design/icons';
@@ -9,14 +9,15 @@ import { connect } from 'react-redux';
 
 const HeaderToolbar = ({ user, ...props }) => {
     const [listUser, setListUser] = useState([]);
-    const onSearch = (query) => {
-        if (!query.length) return setListUser([]);
-        getUserList(query)
-            .then(res => {
-                setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
-            })
+
+    const _getUserList = query => {
+        getUserList(query).then(res => {
+            setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
+        })
             .catch(err => console.log(err))
     }
+
+    const onSearch = useCallback(_.debounce(_getUserList, 800), [])
 
     const goToUserProfile = (id) => {
         setListUser([]);
