@@ -6,9 +6,12 @@ import { Card, Avatar, Menu, Popconfirm, Dropdown, Tooltip } from 'antd';
 import { deletePublication } from '../../endpoints/publication/publication';
 import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
+import { withRouter } from 'react-router-dom';
+import _ from 'underscore';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData }) => {
+const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData, ...props }) => {
+    console.log(props?.match)
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
@@ -29,9 +32,9 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
 
     const menu = (
         <Menu onClick={handleMenuClick}>
-            <Menu.Item key="edit" icon={<EditOutlined />}>
+            {user?._id === rawData?.ownerId && <Menu.Item key="edit" icon={<EditOutlined />}>
                 {i18n.t('button.publication.label.edit')}
-            </Menu.Item>
+            </Menu.Item>}
             <Popconfirm
                 title={i18n.t('publication.ask.delete')}
                 onConfirm={confirm}
@@ -53,7 +56,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={<div className="meta-container">
                         <span>{rawData?.user?.username}</span>
-                        <Dropdown.Button trigger={['click']} overlay={user?._id === rawData?.ownerId ? menu : <Menu />} icon={user?._id === rawData?.ownerId ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>
+                        <Dropdown.Button trigger={['click']} overlay={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? menu : <Menu />} icon={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>
                     </div>}
                     description={<div className="meta-description">
                         <small>
@@ -73,4 +76,4 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
 }
 
 const mapStateToProps = ({ user }) => ({ user });
-export default connect(mapStateToProps)(PublicationDetail);
+export default _.compose(connect(mapStateToProps), withRouter)(PublicationDetail);
