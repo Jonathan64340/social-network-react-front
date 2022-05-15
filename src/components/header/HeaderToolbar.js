@@ -11,6 +11,7 @@ const HeaderToolbar = ({ user, ...props }) => {
     const [listUser, setListUser] = useState([]);
 
     const _getUserList = query => {
+        if (!listUser.length) setListUser([]);
         getUserList(query).then(res => {
             setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
         })

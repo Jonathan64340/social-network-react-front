@@ -3,10 +3,12 @@ import { Input, Form, Button } from 'antd';
 import i18n from '../../i18n';
 import { createPublication } from '../../endpoints/publication/publication';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import _ from 'underscore';
 
 const { TextArea } = Input;
 
-const PublicationForm = ({ user, onCreate, current }) => {
+const PublicationForm = ({ user, onCreate, current, ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [form] = Form.useForm();
@@ -18,7 +20,8 @@ const PublicationForm = ({ user, onCreate, current }) => {
         const successPublication = await provider({
             ...(current && { _id: current?._id }),
             ownerId: user?._id,
-            content: event?.publication
+            content: event?.publication,
+            wall: props?.match?.params?.id ? { _id: props?.match?.params?.id } : { _id: user?._id }
         });
 
         form.setFieldsValue({
@@ -44,4 +47,4 @@ const PublicationForm = ({ user, onCreate, current }) => {
 }
 
 const mapStateToProps = ({ user }) => ({ user });
-export default connect(mapStateToProps)(PublicationForm);
+export default _.compose(connect(mapStateToProps), withRouter)(PublicationForm);
