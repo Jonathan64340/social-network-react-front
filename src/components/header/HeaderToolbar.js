@@ -18,6 +18,7 @@ const HeaderToolbar = ({ user, ...props }) => {
             .catch(err => console.log(err))
     }
 
+    // eslint-disable-next-line
     const onSearch = useCallback(_.debounce(_getUserList, 800), [])
 
     const goToUserProfile = (id) => {

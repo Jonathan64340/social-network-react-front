@@ -1,13 +1,13 @@
 import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 
 const MessengerChat = () => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
 
-    useEffect(() => {
+    useMemo(() => {
         const openNewConversation = EventEmitter().subscriber('openConversation', (data) => createNewConversationItem(data));
         // To destroy listenner on unmount
         return () => {
