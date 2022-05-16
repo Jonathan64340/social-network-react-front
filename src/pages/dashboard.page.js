@@ -58,7 +58,8 @@ const Dashboard = ({ user, ...props }) => {
                     setPublication(result);
                 })
         }
-    }, [user?.isLogged, user?._id, viewUser]);
+        // eslint-disable-next-line
+    }, [user?._id, viewUser]);
 
     const onCloseModal = () => {
         setVisible(false);
@@ -171,10 +172,10 @@ const Dashboard = ({ user, ...props }) => {
 
     return (
         <>
-            <Header className="toolbar-container">
+            <Header className="toolbar-container sticky">
                 <HeaderToolbar />
             </Header>
-            <Layout hasSider className="dashboard-container">
+            <Layout hasSider className="dashboard-container sticky">
                 <Layout.Sider>
                     <MessengerSidebar />
                 </Layout.Sider>
@@ -197,7 +198,7 @@ const Dashboard = ({ user, ...props }) => {
                     <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
                     <MessengerChat />
                 </Content>
-                <Layout.Sider className='sider-messenger'>
+                <Layout.Sider className='sider-messenger sticky'>
                     <MessengerSidebar display='friend' />
                 </Layout.Sider>
             </Layout>
