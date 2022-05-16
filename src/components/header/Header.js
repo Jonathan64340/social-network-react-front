@@ -14,10 +14,6 @@ const Header = ({ user, onReplyFriend, ...props }) => {
   }, [])
 
   useEffect(() => {
-    console.log(_viewUser)
-  }, [_viewUser])
-
-  useEffect(() => {
     if (props?.match?.params?.id && user?._id) {
       setViewUser({});
       onReplyFriend(false);
