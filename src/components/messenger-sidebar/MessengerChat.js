@@ -90,10 +90,10 @@ const MessengerChat = ({ user }) => {
         </div>)
     }
 
-    const createNewConversationItem = ({ id, name }) => {
+    const createNewConversationItem = ({ id, username }) => {
         if (!viewedConversations.includes(id)) {
             viewedConversations.push(id);
-            setJsxElements(jsx => [...jsx, { component: () => <MessengerChatItem name={name} id={id} />, id }])
+            setJsxElements(jsx => [...jsx, { component: () => <MessengerChatItem name={username} id={id} />, id }])
         }
     }
 

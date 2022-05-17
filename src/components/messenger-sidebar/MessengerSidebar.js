@@ -6,32 +6,35 @@ import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 
 const MessengerSidebar = ({ display, user }) => {
-    const [friendList] = useState([{ id: 1, name: 'Silver', status: 'online' }, { id: 2, name: 'Spictor', status: 'busy' }]);
+    const [friendList, setFriendList] = useState([]);
 
     useEffect(() => {
         if (display === 'friend' && user?._id) {
             getFriends({ id: user?._id })
-                .then(friends => console.log(friends))
+                .then(friends => {
+                    setFriendList(friends)
+                })
+                .catch(() => setFriendList(f => ([...f])))
         }
     }, [display, user?._id])
 
     const renderFriendsItem = () => {
         return (
             <div className='friend-list'>
-                {friendList.map((friend, index) => (
-                    <div className='friend-item' key={index} onClick={() => openConversation(friend)}>
-                        {friend?.status === 'online' && <span className='online-tick'></span>}
-                        {friend?.status === 'busy' && <span className='busy-tick'></span>}
+                {friendList.map(({ friends_data }, index) => (
+                    <div className='friend-item' key={index} onClick={() => openConversation(friends_data[0])}>
+                        {friends_data[0]?.status === 'online' && <span className='online-tick'></span>}
+                        {friends_data[0]?.status === 'busy' && <span className='busy-tick'></span>}
                         <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
-                        <span>{friend?.name}</span>
+                        <span>{friends_data[0]?.username}</span>
                     </div>
                 ))}
             </div>
         )
     }
 
-    const openConversation = ({ id, name, status }) => {
-        EventEmitter().emit('openConversation', { id, name, status });
+    const openConversation = ({ _id, username, status }) => {
+        EventEmitter().emit('openConversation', { id: _id, username, status });
     }
 
     const render = () => {
