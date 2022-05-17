@@ -1,10 +1,19 @@
 import { Avatar, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
+import { connect } from 'react-redux';
 
-const MessengerSidebar = ({ display }) => {
+const MessengerSidebar = ({ display, user }) => {
     const [friendList] = useState([{ id: 1, name: 'Silver', status: 'online' }, { id: 2, name: 'Spictor', status: 'busy' }]);
+
+    useEffect(() => {
+        if (display === 'friend' && user?._id) {
+            getFriends({ id: user?._id })
+                .then(friends => console.log(friends))
+        }
+    }, [display, user?._id])
 
     const renderFriendsItem = () => {
         return (
@@ -45,4 +54,5 @@ const MessengerSidebar = ({ display }) => {
     return render();
 };
 
-export default MessengerSidebar;
+const mapStateToProps = ({ user }) => ({ user })
+export default connect(mapStateToProps)(MessengerSidebar);

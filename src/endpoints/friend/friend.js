@@ -17,3 +17,9 @@ export async function replyFriendRequest({ id, senderId, receiverId, status }) {
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
+
+export async function getFriends({ id }) {
+    return axios.get(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/getFriends?id=${id}`)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}
