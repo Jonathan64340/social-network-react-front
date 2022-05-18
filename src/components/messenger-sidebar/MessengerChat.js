@@ -28,7 +28,7 @@ const MessengerChat = () => {
 
         useEffect(() => {
             getMessages({ context: [id, user?._id] })
-                .then(messages => setTchat(messages))
+                .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
                 .catch((err) => console.log(err))
 
         }, [])

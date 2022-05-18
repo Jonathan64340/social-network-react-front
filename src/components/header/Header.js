@@ -5,6 +5,7 @@ import { getUser } from '../../endpoints/profile/profile';
 import { withRouter } from 'react-router-dom';
 import i18n from '../../i18n';
 import { getFriendRequest, sendFriendRequest, replyFriendRequest } from '../../endpoints/friend/friend';
+import { EventEmitter } from '../../utils/emitter';
 
 const Header = ({ user, onReplyFriend, ...props }) => {
   const [_viewUser, setViewUser] = useState({});
@@ -66,6 +67,10 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     })
   }
 
+  const openConversation = () => {
+    EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username });
+  }
+
   return <div className="header-container">
     <div className="header-container-background-cover" style={{
       background: "url(https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg)"
@@ -77,7 +82,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
         </div>
         <div className="header-container-btn-group">
           {props?.match?.params?.id && (<>
-            <Button type="primary" size="small">{i18n.t('common.action.message.text')}</Button>
+            <Button type="primary" size="small" onClick={() => openConversation()}>{i18n.t('common.action.message.text')}</Button>
             {(_viewUser?.status === 'pending' && _viewUser?.senderId === user?._id)
               && <Button type="danger" size="small" onClick={() => replyFriendRequestAction()}>{i18n.t('common.action.friend_request_pending_sender')}</Button>}
             {(_viewUser?.status === 'pending' && _viewUser?.senderId !== user?._id) && <Button type="secondary" size="small" onClick={() => replyFriendRequestAction('accept')}>{i18n.t('common.action.friend_request_pending_receiver_accept')}</Button>}
