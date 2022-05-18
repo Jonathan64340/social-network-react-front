@@ -1,13 +1,14 @@
 import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
 import { Avatar, Input, Tooltip } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
+import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
 import { store } from '../../index';
 import { uniqueId } from 'underscore';
 
-const MessengerChat = ({ user }) => {
+const MessengerChat = () => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
 
@@ -25,26 +26,43 @@ const MessengerChat = ({ user }) => {
         const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
 
+        useEffect(() => {
+            getMessages({ context: [id, user?._id] })
+                .then(messages => setTchat(messages))
+                .catch((err) => console.log(err))
+
+        }, [])
+
         const handleChange = event => {
             event?.persist();
             setInitialValue(event?.currentTarget?.value);
         }
 
-        const sendMessage = event => {
+        /**
+         * 
+         * @param {*} event 
+         * context, senderId, receiverId, type, content
+         */
+        const sendMessage = async event => {
             event?.persist();
 
             if (event?.keyCode === 13) {
-                setTchat(_chat => ([..._chat, {
-                    id: id,
+                const payload = {
+                    context: [id, user?._id],
                     senderId: user?._id,
                     receiverId: id,
-                    username: user?.username,
                     type: 'string',
                     content: {
                         message: initialValue
                     }
-                }]))
-                setInitialValue('');
+                };
+
+                _sendMessage(payload)
+                    .then(message => {
+                        setTchat(_chat => ([..._chat, { ...message }]))
+                        setInitialValue('');
+                    })
+                    .catch(() => setInitialValue(''))
             }
         }
 
@@ -64,20 +82,18 @@ const MessengerChat = ({ user }) => {
             </div>
             <div className='messenger-chat-item-content'>
                 {tchat.map((el, index) => (<div key={uniqueId('item_content_')} className="content-item-tchat">
-                    {user?._id} {el?.senderId}
-                    <div className={`item-message ${(user?._id === el?.senderId)? 'sender' : 'receiver'}`} >
+                    <div className={`item-message ${(user?._id === el?.senderId) ? 'sender' : 'receiver'}`} >
                         {((el?.senderId && user?._id) !== el?.senderId) && (
                             <>
                                 {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
                                     <div className="content-avatar">
                                         <Avatar size="small" src={""}>
-                                            {el?.username.length > 1 ? el?.username.substring(0, el?.username.length - (el?.username.length - 1)) : el?.username}
+                                            {name.length > 1 ? name.substring(0, name.length - (name.length - 1)) : name}
                                         </Avatar>
                                     </div>
                                 }
                             </>)}
                         {el?.type === 'string' ? <Tooltip>
-
                             <div className={`content-box-message ${tchat[index]?.senderId === tchat[index + 1]?.senderId ? 'continue' : 'stop'} 
                                 ${tchat[index - 1]?.senderId === tchat[index + 1]?.senderId ? 'continue-normalize' : 'stop-normalize'}`}>
                                 <p><CustomRenderElement string={el?.content?.message} /></p>
