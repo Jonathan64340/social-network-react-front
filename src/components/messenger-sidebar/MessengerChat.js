@@ -8,7 +8,7 @@ import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messen
 import { store } from '../../index';
 import { uniqueId } from 'underscore';
 
-const MessengerChat = () => {
+const MessengerChat = memo(() => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
 
@@ -30,7 +30,8 @@ const MessengerChat = () => {
             getMessages({ context: [id, user?._id] })
                 .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
                 .catch((err) => console.log(err))
-        }, [])
+
+            }, [])
 
         const handleChange = event => {
             event?.persist();
@@ -52,7 +53,7 @@ const MessengerChat = () => {
                     receiverId: id,
                     type: 'string',
                     content: {
-                        message: initialValue
+                        message: initialValue || uniqueId('Test_')
                     }
                 };
 
@@ -111,14 +112,17 @@ const MessengerChat = () => {
     const createNewConversationItem = ({ id, username }) => {
         if (!viewedConversations.includes(id)) {
             viewedConversations.push(id);
-            setJsxElements(jsx => [...jsx, { component: () => <MessengerChatItem name={username} id={id} />, id }])
+            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} id={id} />])
         }
     }
 
     const closeConversation = ({ id }) => {
         if (viewedConversations.includes(id)) {
             viewedConversations = viewedConversations.filter(j => j !== id);
-            setJsxElements(jsx => [...jsx.filter(j => j.id !== id)])
+            const conversationItem = document.getElementById(`conversation-item-${id}`);
+            if (conversationItem) {
+                conversationItem.remove();
+            }
         }
     }
 
@@ -158,9 +162,10 @@ const MessengerChat = () => {
             func();
         }
     }
+    return <div className='open-conversation-container'>{jsxElements}</div>
 
-    return <div className='open-conversation-container'>{jsxElements.map(item => (<item.component key={uniqueId('container_')} />))}</div>
-}
+    // return <div className='open-conversation-container'>{jsxElements.map(item => (<item.component key={uniqueId('container_')} />))}</div>
+})
 
 const mapStateToProps = ({ user }) => ({ user })
 export default connect(mapStateToProps)(memo(MessengerChat));
