@@ -5,13 +5,13 @@ import {
     Route
 } from "react-router-dom";
 
-
 import { connect } from 'react-redux';
 import LoginPage from './pages/login.page';
 import RegisterPage from './pages/register.page';
 import { getTokenAndRefreshToken } from './utils/persist.login';
 import { setLogin } from './actions/user.actions';
 import Dashboard from './pages/dashboard.page';
+import NotFound from './pages/not_found.page';
 import { getMe } from './endpoints/profile/profile';
 import PrivateRoute from './components/privateRoute/PrivateRoute';
 import _ from 'underscore';
@@ -46,6 +46,10 @@ const App = ({ ...props }) => {
         {
             path: '/publication/:id',
             component: Dashboard
+        },
+        {
+            path: '*',
+            component: NotFound
         }
     ];
 
@@ -75,8 +79,8 @@ const App = ({ ...props }) => {
             <ToastContainer />
             <Router>
                 <Switch>
-                    {routes.map((route, index) => (<Route path={route.path} key={index} component={route.component} exact />))}
                     {privateRoutes.map((route, index) => (<PrivateRoute component={route.component} key={index * 10 / 5} isLogged={isLogged} path={route.path} exact />))}
+                    {routes.map((route, index) => (<Route path={route.path} key={index} component={route.component} exact />))}
                 </Switch>
             </Router>
         </>
