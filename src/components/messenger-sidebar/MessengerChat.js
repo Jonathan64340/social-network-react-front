@@ -23,7 +23,7 @@ const MessengerChat = ({ user }) => {
     const MessengerChatItem = ({ id, name }) => {
         const [tchat, setTchat] = useState([]);
         const [initialValue, setInitialValue] = useState('');
-        const { _id, username } = store.getState()?.user;
+        const user = store.getState()?.user;
 
         const handleChange = event => {
             event?.persist();
@@ -32,12 +32,13 @@ const MessengerChat = ({ user }) => {
 
         const sendMessage = event => {
             event?.persist();
+
             if (event?.keyCode === 13) {
                 setTchat(_chat => ([..._chat, {
-                    id: uniqueId('id_'),
-                    senderId: _id,
+                    id: id,
+                    senderId: user?._id,
                     receiverId: id,
-                    username,
+                    username: user?.username,
                     type: 'string',
                     content: {
                         message: initialValue
@@ -63,8 +64,9 @@ const MessengerChat = ({ user }) => {
             </div>
             <div className='messenger-chat-item-content'>
                 {tchat.map((el, index) => (<div key={uniqueId('item_content_')} className="content-item-tchat">
-                    <div className={`item-message ${user?._id === el?.senderId ? 'sender' : 'receiver'}`} >
-                        {(el?.senderId && user?._id !== el?.senderId) && (
+                    {user?._id} {el?.senderId}
+                    <div className={`item-message ${(user?._id === el?.senderId)? 'sender' : 'receiver'}`} >
+                        {((el?.senderId && user?._id) !== el?.senderId) && (
                             <>
                                 {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
                                     <div className="content-avatar">
@@ -75,6 +77,7 @@ const MessengerChat = ({ user }) => {
                                 }
                             </>)}
                         {el?.type === 'string' ? <Tooltip>
+
                             <div className={`content-box-message ${tchat[index]?.senderId === tchat[index + 1]?.senderId ? 'continue' : 'stop'} 
                                 ${tchat[index - 1]?.senderId === tchat[index + 1]?.senderId ? 'continue-normalize' : 'stop-normalize'}`}>
                                 <p><CustomRenderElement string={el?.content?.message} /></p>
@@ -135,8 +138,8 @@ const MessengerChat = ({ user }) => {
             const id = conversationItemElement.id.split('-').reverse();
             const func = () =>
                 (collapsed && collapsed === 'opened') ?
-                    minimizeConversation({ id: parseInt(id[0]) }, element) :
-                    maximizeConversation({ id: parseInt(id[0]) }, element)
+                    minimizeConversation({ id: id[0] }, element) :
+                    maximizeConversation({ id: id[0] }, element)
             func();
         }
     }
