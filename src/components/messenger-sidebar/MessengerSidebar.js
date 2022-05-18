@@ -1,5 +1,5 @@
 import { Avatar, Input } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
@@ -58,4 +58,4 @@ const MessengerSidebar = ({ display, user }) => {
 };
 
 const mapStateToProps = ({ user }) => ({ user })
-export default connect(mapStateToProps)(MessengerSidebar);
+export default connect(mapStateToProps)(memo(MessengerSidebar));

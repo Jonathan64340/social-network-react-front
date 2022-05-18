@@ -30,7 +30,6 @@ const MessengerChat = () => {
             getMessages({ context: [id, user?._id] })
                 .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
                 .catch((err) => console.log(err))
-
         }, [])
 
         const handleChange = event => {
@@ -164,4 +163,4 @@ const MessengerChat = () => {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
-export default connect(mapStateToProps)(MessengerChat);
+export default connect(mapStateToProps)(memo(MessengerChat));
