@@ -1,5 +1,5 @@
 import { Avatar, Input } from 'antd';
-import React, { useEffect, useState, memo, useMemo } from 'react';
+import React, { useState, memo, useMemo } from 'react';
 import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
