@@ -22,11 +22,11 @@ const MessengerSidebar = ({ display, user }) => {
         return (
             <div className='friend-list'>
                 {friendList.map(({ friends_data }, index) => (
-                    <div className='friend-item' key={index} onClick={() => openConversation(friends_data[0])}>
-                        {friends_data[0]?.status === 'online' && <span className='online-tick'></span>}
-                        {friends_data[0]?.status === 'busy' && <span className='busy-tick'></span>}
+                    <div className='friend-item' key={index} onClick={() => openConversation(friends_data)}>
+                        {friends_data?.status === 'online' && <span className='online-tick'></span>}
+                        {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
                         <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
-                        <span>{friends_data[0]?.username}</span>
+                        <span>{friends_data?.username}</span>
                     </div>
                 ))}
             </div>
