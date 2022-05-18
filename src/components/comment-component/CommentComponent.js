@@ -60,7 +60,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
                     <List.Item.Meta
                         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                         title={<div className="meta-container">
-                            <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)?.username}</span>
+                            <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
                             <Dropdown.Button trigger={['click']} overlay={(user?._id === item?.ownerId || user?._id === rawData?.ownerId ) ? menu(item?._id, item?.ownerId, item) : <Menu />} icon={(user?._id === item?.ownerId || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip></Dropdown.Button>
                         </div>}
                         description={
