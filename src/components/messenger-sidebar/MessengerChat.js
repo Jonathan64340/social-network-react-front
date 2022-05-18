@@ -7,6 +7,7 @@ import CustomRenderElement from '../../_helper/customRender';
 import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
 import { store } from '../../index';
 import { uniqueId } from 'underscore';
+import { socketIoService } from '../../service/socket/socket';
 
 const MessengerChat = memo(() => {
     let viewedConversations = [];
@@ -25,13 +26,14 @@ const MessengerChat = memo(() => {
         const [tchat, setTchat] = useState([]);
         const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
-
         useEffect(() => {
             getMessages({ context: [id, user?._id] })
                 .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
                 .catch((err) => console.log(err))
 
-            }, [])
+            socketIoService({ channel: user?._id })
+                .subscribe(e => console.log(e));
+        }, [])
 
         const handleChange = event => {
             event?.persist();
