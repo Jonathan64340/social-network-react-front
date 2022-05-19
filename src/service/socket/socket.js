@@ -1,24 +1,48 @@
+import { setSocketProvider } from "../../actions/user.actions";
 const { io } = require("socket.io-client");
-const socket = io();
+let socket = undefined;
 
-let socketServiceSubscriber = [];
+export const socketIoService = async ({ type: type = 'subscribe', channel, ...options }) => {
+    const { store } = require("../../index");
+    if (!await store.getState()?.user?.socketProvider) {
+        const socketIoInit = () => {
+            return new Promise(resolve => {
+                socket = io('http://localhost:4000');
+    
+                let intervalSocketInitializer = setInterval(() => {
+                    console.log(socket)
+                    if (socket.connected) {
+                        clearInterval(intervalSocketInitializer);
+                        resolve(socket);
+                    }
+                }, 300)
+            })
+        }
+        await store.dispatch(setSocketProvider({ ...await socketIoInit() }))
+    } else {
+        socket = await store.getState()?.user?.socketProvider;
+    }
 
-export const socketIoService = ({ type: type = 'subscribe', channel, ...options }) => {
+    let socketServiceSubscriber = [];
     const defaultOptions = {
         ...(type === 'subscribe' && {
             subscribe: (callback) => {
-                if (socketServiceSubscriber && !socketServiceSubscriber.includes(channel)) {
-                    socketServiceSubscriber.push(channel);
-                    socket.on(channel, data => callback(data));
-                } else {
-                    socket.on(channel, data => callback(data));
+                if (socket) {
+                    if (options?.safeSocketSubscriber && !socketServiceSubscriber.includes(channel)) {
+                        socketServiceSubscriber.push(channel);
+                        socket.io.on(channel, data => callback(data));
+                    } else {
+                        socket.io.on(channel, data => callback(data));
+                    }
                 }
             },
             unsubscribe: () => {
-                if (options.safeSocketSubscriber && socketServiceSubscriber.includes(channel)) {
-                    socketServiceSubscriber = [...new Set(socketServiceSubscriber.filter(s => s !== channel))];
+                if (socket) {
+                    if (options?.safeSocketSubscriber && socketServiceSubscriber.includes(channel)) {
+                        socketServiceSubscriber = [...new Set(socketServiceSubscriber.filter(s => s !== channel))];
+                    }
+                    socket.io.off(channel);
                 }
-                socket.off(channel);
             }
         })
     }
@@ -27,5 +51,29 @@ export const socketIoService = ({ type: type = 'subscribe', channel, ...options 
 
     return {
         ...defaultOptions,
+        ...(options?.emit && {
+            emit: (payload) => {
+                if (socket) {
+                    socket.io.emit(channel, payload);
+                }
+            },
+            emitBroadcast: (payload) => {
+                if (socket) {
+                    socket.io.broadcast.emit(channel, payload);
+                }
+            }
+        }),
+        ...(options?.emitTo && {
+            /**
+             * 
+             * @param {*} payload 
+             * emit to in the payload : { payload.socket.id }
+             */
+            emitTo: (payload) => {
+                if (socket) {
+                    socket.io.emit(channel, payload);
+                }
+            },
+        })
     }
 }

@@ -33,8 +33,8 @@ const MessengerSidebar = ({ display, user }) => {
         )
     }
 
-    const openConversation = ({ _id, username, status }) => {
-        EventEmitter().emit('openConversation', { id: _id, username, status });
+    const openConversation = ({ _id, username, sid, status }) => {
+        EventEmitter().emit('openConversation', { id: _id, username, sid, status });
     }
 
     const render = () => {

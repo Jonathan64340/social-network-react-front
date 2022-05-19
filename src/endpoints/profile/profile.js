@@ -17,3 +17,9 @@ export async function getUser(id) {
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }
+
+export async function updateUser(payload) {
+    return axios.post(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/user/edit`, payload)
+        .then(({ data }) => data)
+        .catch(err => new Error(err))
+}

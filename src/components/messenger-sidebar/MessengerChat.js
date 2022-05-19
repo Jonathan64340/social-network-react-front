@@ -5,9 +5,8 @@ import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
 import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
-import { store } from '../../index';
+import { store, socket } from '../../index';
 import { uniqueId } from 'underscore';
-import { socketIoService } from '../../service/socket/socket';
 
 const MessengerChat = memo(() => {
     let viewedConversations = [];
@@ -22,7 +21,7 @@ const MessengerChat = memo(() => {
         // eslint-disable-next-line
     }, [])
 
-    const MessengerChatItem = ({ id, name }) => {
+    const MessengerChatItem = ({ id, sid, name }) => {
         const [tchat, setTchat] = useState([]);
         const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
@@ -31,8 +30,16 @@ const MessengerChat = memo(() => {
                 .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
                 .catch((err) => console.log(err))
 
-            socketIoService({ channel: user?._id })
-                .subscribe(e => console.log(e));
+            socket.on('messenger', data => {
+                console.log(data, sid)
+                if (data?.from === sid) {
+                    setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
+                }
+            })
+
+            return () => {
+                socket.io.off(user?.id);
+            }
         }, [])
 
         const handleChange = event => {
@@ -61,8 +68,10 @@ const MessengerChat = memo(() => {
 
                 _sendMessage(payload)
                     .then(message => {
-                        setTchat(_chat => ([..._chat, { ...message }]))
+                        setTchat(_chat => ([..._chat, { ...message }]));
                         setInitialValue('');
+                        socket.emit('messenger', { ...message, to: sid });
+                        console.log('emit')
                     })
                     .catch(() => setInitialValue(''))
             }
@@ -111,10 +120,10 @@ const MessengerChat = memo(() => {
         </div>)
     }
 
-    const createNewConversationItem = ({ id, username }) => {
+    const createNewConversationItem = ({ id, username, sid }) => {
         if (!viewedConversations.includes(id)) {
             viewedConversations.push(id);
-            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} id={id} />])
+            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} sid={sid} id={id} />])
         }
     }
 
@@ -165,9 +174,7 @@ const MessengerChat = memo(() => {
         }
     }
     return <div className='open-conversation-container'>{jsxElements}</div>
-
-    // return <div className='open-conversation-container'>{jsxElements.map(item => (<item.component key={uniqueId('container_')} />))}</div>
 })
 
 const mapStateToProps = ({ user }) => ({ user })
-export default connect(mapStateToProps)(memo(MessengerChat));
+export default connect(mapStateToProps)(MessengerChat);

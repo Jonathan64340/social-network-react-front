@@ -5,6 +5,7 @@ import {
     Route
 } from "react-router-dom";
 
+import { socket } from './index';
 import { connect } from 'react-redux';
 import LoginPage from './pages/login.page';
 import RegisterPage from './pages/register.page';
@@ -12,7 +13,7 @@ import { getTokenAndRefreshToken } from './utils/persist.login';
 import { setLogin } from './actions/user.actions';
 import Dashboard from './pages/dashboard.page';
 import NotFound from './pages/not_found.page';
-import { getMe } from './endpoints/profile/profile';
+import { getMe, updateUser } from './endpoints/profile/profile';
 import PrivateRoute from './components/privateRoute/PrivateRoute';
 import _ from 'underscore';
 import 'antd/dist/antd.css';
@@ -65,10 +66,19 @@ const App = ({ ...props }) => {
     ]
 
     const getAuth = async () => {
+        console.log(socket)
         if (getTokenAndRefreshToken()['accessToken'] && getTokenAndRefreshToken()['refreshToken']) {
-            const me = await getMe();
-            setIsLogged(true);
-            props.dispatch(setLogin({ accessToken: getTokenAndRefreshToken()['accessToken'], refreshToken: getTokenAndRefreshToken()['refreshToken'], ...me }));
+            let me = await getMe();
+            let sidChecker = setInterval(async () => {
+                if (socket.id) {
+                    await updateUser({ ...me, sid: socket.id });
+                    me = await getMe();
+                    setIsLogged(true);
+                    props.dispatch(setLogin({ accessToken: getTokenAndRefreshToken()['accessToken'], refreshToken: getTokenAndRefreshToken()['refreshToken'], ...me }));
+                    clearInterval(sidChecker)
+                }
+            }, 500)
+            
         } else {
             setIsLogged(false);
         }

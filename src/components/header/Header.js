@@ -68,7 +68,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
   }
 
   const openConversation = () => {
-    EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username });
+    EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username, sid: _viewUser?.sid });
   }
 
   return <div className="header-container">
