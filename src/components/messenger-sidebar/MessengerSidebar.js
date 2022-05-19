@@ -1,5 +1,5 @@
 import { Avatar, Input } from 'antd';
-import React, { useState, memo, useMemo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 const MessengerSidebar = ({ display, user }) => {
     const [friendList, setFriendList] = useState([]);
 
-    useMemo(() => {
+    useEffect(() => {
         if (display === 'friend' && user?._id) {
             getFriends({ id: user?._id })
                 .then(friends => {
@@ -57,5 +57,11 @@ const MessengerSidebar = ({ display, user }) => {
     return render();
 };
 
+const memoAffect = (prev, next) => {
+    if (prev.display === next.display) {
+        return false;
+    }
+}
+
 const mapStateToProps = ({ user }) => ({ user })
-export default connect(mapStateToProps)(memo(MessengerSidebar));
+export default connect(mapStateToProps)(memo(MessengerSidebar, memoAffect));

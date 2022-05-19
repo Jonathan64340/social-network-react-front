@@ -45,10 +45,6 @@ const App = ({ ...props }) => {
             component: RegisterPage
         },
         {
-            path: '/publication/:id',
-            component: Dashboard
-        },
-        {
             path: '*',
             component: NotFound
         }
@@ -56,29 +52,24 @@ const App = ({ ...props }) => {
 
     const privateRoutes = [
         {
-            path: '/',
-            component: Dashboard
-        },
-        {
-            path: '/profile/:id',
+            path: ['/', '/profile/:id', '/publication/:id'],
             component: Dashboard
         }
     ]
 
     const getAuth = async () => {
-        console.log(socket)
         if (getTokenAndRefreshToken()['accessToken'] && getTokenAndRefreshToken()['refreshToken']) {
             let me = await getMe();
             let sidChecker = setInterval(async () => {
                 if (socket.id) {
-                    await updateUser({ ...me, sid: socket.id });
+                    await updateUser({ ...me, sid: socket.id, type: 'login' });
                     me = await getMe();
                     setIsLogged(true);
                     props.dispatch(setLogin({ accessToken: getTokenAndRefreshToken()['accessToken'], refreshToken: getTokenAndRefreshToken()['refreshToken'], ...me }));
                     clearInterval(sidChecker)
                 }
             }, 500)
-            
+
         } else {
             setIsLogged(false);
         }

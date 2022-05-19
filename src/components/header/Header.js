@@ -36,9 +36,17 @@ const Header = ({ user, onReplyFriend, ...props }) => {
           props?.history?.push('/not_found');
           setViewUser({})
         })
+    } else {
+      getUser(props?.match?.params?.id || user?._id)
+        .then(data => setViewUser(u => ({ ...u, ...data })))
+        .catch(() => {
+          props?.history?.push('/not_found');
+          setViewUser({})
+        })
     }
+
     // eslint-disable-next-line
-  }, [props?.match?.params?.id, user?._id])
+  }, [props?.match?.params?.id, props?.match?.path])
 
   const sendFriendRequestAction = () => {
     sendFriendRequest({

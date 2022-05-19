@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import HeaderCustom from '../components/header/Header';
@@ -16,39 +16,17 @@ const { Content, Header, Footer } = Layout;
 const Dashboard = ({ user, ...props }) => {
     const [publication, setPublication] = useState([]);
     const [current, setCurrent] = useState(false);
-    const [viewUser, setViewUser] = useState(false);
-    const [scrollListener, setScrollListener] = useState(null);
+    const [viewUser, setViewUser] = useState(user?._id);
     const [visible, setVisible] = useState(false);
     const [canPostOrComment, setCanPostOrComment] = useState(false);
 
     useEffect(() => {
-        const headerRef = document.querySelector('.toolbar-container');
-        const siderMessenger = document.querySelector('.sider-messenger');
-        const dashboardContainer = document.querySelector('.dashboard-container');
-
-        setScrollListener(window.addEventListener('scroll', () => {
-            if (window?.scrollY >= 0) {
-                headerRef?.classList?.add('sticky');
-                siderMessenger?.classList.add('sticky');
-                dashboardContainer?.classList?.add('sticky');
-            } else {
-                headerRef?.classList?.remove('sticky');
-                dashboardContainer?.classList?.remove('sticky');
-                siderMessenger?.classList?.remove('sticky');
-            }
-            // To destroy listenner on unmount
-            return () => {
-                scrollListener && scrollListener.removeEventListener();
-            }
-        }));
-
-    }, [scrollListener])
-
-    useEffect(() => {
         if (props?.match?.params?.id) {
             setViewUser(props?.match?.params?.id);
+        } else {
+            setViewUser(user?._id);
         }
-    }, [props?.match?.params?.id])
+    }, [props?.match?.params?.id, props?.match?.path])
 
     useEffect(() => {
 
@@ -177,7 +155,7 @@ const Dashboard = ({ user, ...props }) => {
             </Header>
             <Layout hasSider className="dashboard-container sticky">
                 <Layout.Sider>
-                    <MessengerSidebar />
+                    <MessengerSidebar display='default' />
                 </Layout.Sider>
                 <Content>
                     <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
