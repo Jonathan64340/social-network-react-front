@@ -166,7 +166,7 @@ const MessengerChat = memo(() => {
     const maximizeConversation = ({ id }, element = null) => {
         if (viewedConversations.includes(id)) {
             const conversationItem = document.getElementById(`conversation-item-${id}`);
-            conversationItem.style.height = '300px';
+            conversationItem.style.height = '450px';
             conversationItem.style.bottom = 0;
             if (element) {
                 element.setAttribute('collapsed', 'opened')
