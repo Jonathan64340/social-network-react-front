@@ -31,7 +31,6 @@ const MessengerChat = memo(() => {
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
-                console.log(data, sid)
                 if (data?.from === sid) {
                     setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
                 }
@@ -71,7 +70,6 @@ const MessengerChat = memo(() => {
                         setTchat(_chat => ([..._chat, { ...message }]));
                         setInitialValue('');
                         socket.emit('messenger', { ...message, to: sid });
-                        console.log('emit')
                     })
                     .catch(() => setInitialValue(''))
             }

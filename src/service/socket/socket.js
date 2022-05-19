@@ -10,7 +10,6 @@ export const socketIoService = async ({ type: type = 'subscribe', channel, ...op
                 socket = io('http://localhost:4000');
     
                 let intervalSocketInitializer = setInterval(() => {
-                    console.log(socket)
                     if (socket.connected) {
                         clearInterval(intervalSocketInitializer);
                         resolve(socket);
