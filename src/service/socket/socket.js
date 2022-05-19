@@ -7,7 +7,7 @@ export const socketIoService = async ({ type: type = 'subscribe', channel, ...op
     if (!await store.getState()?.user?.socketProvider) {
         const socketIoInit = () => {
             return new Promise(resolve => {
-                socket = io('http://localhost:4000');
+                socket = io(proccess.env.REACT_APP_SOCKET_IO || 'http://localhost:4000');
     
                 let intervalSocketInitializer = setInterval(() => {
                     if (socket.connected) {
