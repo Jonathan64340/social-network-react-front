@@ -1,6 +1,6 @@
 import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
 import { Avatar, Input, Tooltip } from 'antd';
-import React, { useMemo, memo, useState, useEffect } from 'react';
+import React, { useMemo, memo, useState, useEffect, useRef } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
@@ -11,6 +11,12 @@ import { uniqueId } from 'underscore';
 const MessengerChat = memo(() => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
+
+    const messagesEndRef = useRef();
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
 
     useMemo(() => {
         const openNewConversation = EventEmitter().subscriber('openConversation', (data) => createNewConversationItem(data));
@@ -25,6 +31,11 @@ const MessengerChat = memo(() => {
         const [tchat, setTchat] = useState([]);
         const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
+
+        useEffect(() => {
+            scrollToBottom()
+          }, [tchat]);
+
         useEffect(() => {
             getMessages({ context: [id, user?._id] })
                 .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
@@ -37,8 +48,9 @@ const MessengerChat = memo(() => {
             })
 
             return () => {
-                socket.io.off(user?.id);
+                socket.io.off('messenger');
             }
+            // eslint-disable-next-line
         }, [])
 
         const handleChange = event => {
@@ -114,6 +126,7 @@ const MessengerChat = memo(() => {
                         }
                     </div>
                 </div>))}
+                <div ref={messagesEndRef} />
             </div>
             <div className='messenger-chat-item-footer'>
                 <Input type={'text'} value={initialValue} onChange={handleChange} size='small' bordered={false} width='100%' onKeyUp={sendMessage} placeholder='Ecrire un message...' />

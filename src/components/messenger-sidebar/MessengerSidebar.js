@@ -4,18 +4,53 @@ import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
+import { socket } from '../../index';
 
 const MessengerSidebar = ({ display, user }) => {
     const [friendList, setFriendList] = useState([]);
+
+    let friendListTmp = [];
 
     useEffect(() => {
         if (display === 'friend' && user?._id) {
             getFriends({ id: user?._id })
                 .then(friends => {
                     setFriendList(friends)
+                    // eslint-disable-next-line
+                    friendListTmp = friends;
+                    const user_to_update = {
+                        username: user?.username,
+                        sid: user?.sid,
+                        status: user?.status,
+                        _id: user?._id
+                    }
+                    socket.emit('update_friends_list', { ...user_to_update, friends });
                 })
                 .catch(() => setFriendList(f => ([...f])))
         }
+
+        socket.on('update_friends_list', friends => {
+            if (friendListTmp.length > 0) {
+                for (let i = 0; i < friendListTmp.length; i++) {
+                    if (friendListTmp[i]['friends_data']['_id'] === friends?._id) {
+                        if (friendListTmp[i]['friends_data'].sid) {
+                            friendListTmp[i]['friends_data'].sid = friends?.sid
+                        } else {
+                            friendListTmp[i]['friends_data'] = { ...friendListTmp[[i]['friends_data']], sid: friends?.sid }
+                        }
+
+                        if ((i + 1 === friendListTmp.length)) {
+                            setFriendList(friendListTmp);
+                        }
+                    }
+                }
+            }
+        })
+
+        return () => {
+            socket.off('update_friends_list')
+        }
+        // eslint-disable-next-line
     }, [display, user?._id])
 
     const renderFriendsItem = () => {

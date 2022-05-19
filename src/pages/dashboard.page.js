@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import HeaderCustom from '../components/header/Header';
@@ -26,6 +26,7 @@ const Dashboard = ({ user, ...props }) => {
         } else {
             setViewUser(user?._id);
         }
+        // eslint-disable-next-line
     }, [props?.match?.params?.id, props?.match?.path])
 
     useEffect(() => {

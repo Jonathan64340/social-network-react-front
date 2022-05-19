@@ -1,8 +1,8 @@
 .messenger-chat-item {
     &-content {
-        overflow: auto;
-        max-height: 240px;
-        padding: 5px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 5px 0;
         flex: 1;
     }
 }
@@ -26,7 +26,7 @@
 .messenger-chat-item-container .item-message.sender {
     padding: 2px 0;
     display: flex;
-    margin-right: 10px;
+    margin: 0 10px;
     flex-direction: row;
     justify-content: flex-end;
 }
@@ -37,8 +37,10 @@
     word-break: break-all;
 }
 
-.lmessenger-chat-item-container .item-message.sender .link-message:hover {
-    color: orange;
+.messenger-chat-item-container .item-message.receiver .link-message {
+    color: rgb(0, 0, 0);
+    text-decoration: underline;
+    word-break: break-all;
 }
 
 .messenger-chat-item-container .item-message.receiver {
@@ -50,14 +52,12 @@
     position: relative;
 }
 
-.messenger-chat-item-container .item-message.receiver .link-message {
-    color: white;
-    text-decoration: underline;
-    word-break: break-all;
+.messenger-chat-item-container .item-message.receiver .link-message:hover {
+    color: $color-header-toolbar-blue;
 }
 
-.messenger-chat-item-container .item-message.receiver .link-message:hover {
-    color: orange;
+.messenger-chat-item-container .content-item-tchat {
+    word-break: break-all;
 }
 
 .messenger-chat-item-container .content-item-tchat::after {
@@ -118,14 +118,57 @@
     margin-top: -5px;
     margin-bottom: -12px;
     margin-right: -5px;
+    width: 100%;
 }
 
-.messenger-chat-item-container .receiver .video-wrapper .video-frame {
-    border: 0;
-    border-radius: 10px;
-    margin-top: -5px;
-    margin-bottom: -12px;
-    margin-left: -5px;
+.messenger-chat-item-container .receiver .video-wrapper {
+    position: relative;
+
+    .video {
+        z-index: 100;
+        position: relative;
+
+        iframe {
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+
+    &:before {
+        content: "";
+        background: white;
+        width: 120%;
+        height: 120%;
+        top: -10px;
+        right: -20px;
+        z-index: 0;
+        position: absolute;
+    }
+}
+
+.messenger-chat-item-container .sender .video-wrapper {
+    position: relative;
+
+    .video {
+        z-index: 100;
+        position: relative;
+
+        iframe {
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+
+    &:before {
+        content: "";
+        background: white;
+        width: 110%;
+        height: 110%;
+        top: -7px;
+        right: -10px;
+        z-index: 0;
+        position: absolute;
+    }
 }
 
 .messenger-chat-item-container .item-message.receiver .content-box-message {
