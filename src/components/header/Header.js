@@ -37,12 +37,15 @@ const Header = ({ user, onReplyFriend, ...props }) => {
           setViewUser({})
         })
     } else {
-      getUser(user?._id)
-        .then(data => setViewUser(u => ({ ...u, ...data })))
-        .catch(() => {
-          props?.history?.push('/not_found');
-          setViewUser({})
-        })
+
+      if (user?._id) {
+        getUser(user?._id)
+          .then(data => setViewUser(u => ({ ...u, ...data })))
+          .catch(() => {
+            props?.history?.push('/not_found');
+            setViewUser({})
+          })
+      }
     }
 
     // eslint-disable-next-line
