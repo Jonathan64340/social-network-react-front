@@ -8,7 +8,7 @@ i18next
     interpolation: {
       escapeValue: false,
     },
-    lng: 'fr',
+    lng: 'en',
     resources: {
       fr,
       en

@@ -69,7 +69,10 @@ const MessengerChat = memo(() => {
                     .then(message => {
                         setTchat(_chat => ([..._chat, { ...message }]));
                         setInitialValue('');
-                        socket.emit('messenger', { ...message, to: sid });
+
+                        if (typeof sid !== 'undefined') {
+                            socket.emit('messenger', { ...message, to: sid });
+                        }
                     })
                     .catch(() => setInitialValue(''))
             }

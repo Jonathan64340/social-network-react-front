@@ -93,7 +93,8 @@ export const en =  {
         "toolbar": {
             "search": {
                 "text": "Find a person or a group"
-            }
+            },
+            "friends_online": "Online friends"
         },
         "common": {
             "yes": "yes",

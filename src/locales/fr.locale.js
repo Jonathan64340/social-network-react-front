@@ -42,7 +42,7 @@ export const fr =  {
             "messenger": {
                 "input": {
                     "search_friend": "Rechercher un ami"
-                }
+                },
             }
         },
         "button": {
@@ -93,7 +93,8 @@ export const fr =  {
         "toolbar": {
             "search": {
                 "text": "Rechercher une personne ou un groupe"
-            }
+            },
+            "friends_online": "Amis connectés"
         },
         "common": {
             "yes": "oui",

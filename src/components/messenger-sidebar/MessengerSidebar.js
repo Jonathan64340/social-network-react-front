@@ -46,7 +46,7 @@ const MessengerSidebar = ({ display, user }) => {
                         <Input bordered={false} className='messenger-sidebar-friend-search-input' type={'text'} size={'small'} placeholder={i18n.t('form.messenger.input.search_friend')}></Input>
                     </div>
                     <div className='messenger-sidebar-friend-btn'>
-                        <span className='online-tick'></span><span>Amis connectés</span>
+                        <span className='online-tick'></span><span>{i18n.t('toolbar.friends_online')}</span>
                     </div>
                 </div>
             )
