@@ -32,16 +32,13 @@ const MessengerSidebar = ({ display, user }) => {
 
         socket.on('update_friends_list', friends => {
             // if (socketUpdater === friends) return;
-            
             if (friendListTmp.length > 0) {
                 for (let i = 0; i < friendListTmp.length; i++) {
                     if (friendListTmp[i]['friends_data']['_id'] === friends?._id) {
                         
                         if (friendListTmp[i]['friends_data'].sid) {
                             friendListTmp[i]['friends_data'].sid = friends?.sid
-                            console.log(friendListTmp[i]['friends_data'].sid)
                         } else {
-                            console.log('nope')
                             friendListTmp[i]['friends_data'] = { ...friendListTmp[i]['friends_data'], sid: friends?.sid }
                         }
                     }

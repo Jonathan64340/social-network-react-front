@@ -8,7 +8,7 @@ import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messen
 import { store, socket } from '../../index';
 import { uniqueId } from 'underscore';
 
-const MessengerChat = memo(() => {
+const MessengerChat = () => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
 
@@ -35,7 +35,7 @@ const MessengerChat = memo(() => {
 
         useEffect(() => {
             scrollToBottom()
-          }, [tchat]);
+        }, [tchat]);
 
         useEffect(() => {
             getMessages({ context: [id, user?._id] })
@@ -43,14 +43,13 @@ const MessengerChat = memo(() => {
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
-                console.log(data, _sid)
-                if (data?.from === _sid) {
+                setSid(data?.from)
+                if ((data?.from === _sid) || (data?.receiverId === id) || (data?.senderId === id)) {
                     setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
                 }
             })
 
             socket.on('update_friends_list', friends => {
-                console.log(friends?._id, id);
                 if (friends?._id === id) {
                     setSid(friends.sid)
                 }
@@ -58,7 +57,7 @@ const MessengerChat = memo(() => {
 
             return () => {
                 socket.off('messenger');
-                socket.off('update_friends_list')
+                socket.off('update_friends_list');
             }
             // eslint-disable-next-line
         }, [id])
@@ -198,7 +197,7 @@ const MessengerChat = memo(() => {
         }
     }
     return <div className='open-conversation-container'>{jsxElements}</div>
-})
+}
 
 const mapStateToProps = ({ user }) => ({ user })
 export default connect(mapStateToProps)(MessengerChat);
