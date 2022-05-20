@@ -43,6 +43,7 @@ const MessengerSidebar = ({ display, user }) => {
                         }
                     }
                     if ((i + 1 === friendListTmp.length)) {
+                        EventEmitter().emit('messengerUpdateInformationUser', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
                         setSocketUpdater(friends?.status);
                         setFriendList(friendListTmp);
                     }

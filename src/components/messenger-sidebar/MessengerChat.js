@@ -43,10 +43,14 @@ const MessengerChat = () => {
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
-                setSid(data?.from)
                 if ((data?.from === _sid) || (data?.receiverId === id) || (data?.senderId === id)) {
                     setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
                 }
+            })
+
+            EventEmitter().subscriber('messengerUpdateInformationUser', ({ id, username, sid, status }) => {
+                // console.log({ id, username, sid, status })
+                setSid(sid)
             })
 
             socket.on('update_friends_list', friends => {
