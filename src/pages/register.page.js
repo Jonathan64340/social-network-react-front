@@ -5,11 +5,12 @@ import { persistTokenAndRefreshToken } from '../utils/persist.login';
 import i18n from '../i18n';
 import { setLogin } from '../actions/user.actions';
 import { Layout, Form, Input, Button, Checkbox } from 'antd';
-import { getMe } from '../endpoints/profile/profile';
+import { getMe, updateUser } from '../endpoints/profile/profile';
 import _ from 'underscore';
 import { toast } from 'react-toastify';
 import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router-dom';
+import { socket } from '../index';
 
 const { Content } = Layout;
 
@@ -50,6 +51,8 @@ const Register = ({ ...props }) => {
         }))
         
         const me = await getMe();
+
+        await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me?.status && { status: 'online' }) });
 
         props.dispatch(setLogin({
             accessToken: user?.accessToken,
