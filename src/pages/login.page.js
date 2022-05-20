@@ -48,7 +48,7 @@ const Login = ({ ...props }) => {
 
         const me = await getMe();
 
-        await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me?.status && { status: 'online' }) });
+        await updateUser({ ...me, sid: socket.id, type: 'login', status: 'online' });
 
         await props.dispatch(setLogin({
             accessToken: user?.accessToken,

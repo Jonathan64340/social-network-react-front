@@ -43,13 +43,15 @@ const MessengerChat = memo(() => {
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
+                console.log(data, _sid)
                 if (data?.from === _sid) {
                     setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
                 }
             })
 
             socket.on('update_friends_list', friends => {
-                if ((friends?._id === id)) {
+                console.log(friends?._id, id);
+                if (friends?._id === id) {
                     setSid(friends.sid)
                 }
             })

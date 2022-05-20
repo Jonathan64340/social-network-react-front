@@ -62,7 +62,7 @@ const App = ({ ...props }) => {
             let me = await getMe();
             let sidChecker = setInterval(async () => {
                 if (socket.id) {
-                    await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me.status && { status: 'online' }) });
+                    await updateUser({ ...me, sid: socket.id, type: 'login', status: 'online' });
                     me = await getMe();
                     setIsLogged(true);
                     props.dispatch(setLogin({ accessToken: getTokenAndRefreshToken()['accessToken'], refreshToken: getTokenAndRefreshToken()['refreshToken'], ...me }));
