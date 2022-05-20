@@ -51,7 +51,7 @@ const MessengerSidebar = ({ display, user }) => {
             socket.off('update_friends_list')
         }
         // eslint-disable-next-line
-    }, [user?._id])
+    }, [user?._id, socket.id])
 
     const renderFriendsItem = () => {
         return (
