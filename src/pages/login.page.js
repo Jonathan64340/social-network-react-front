@@ -41,7 +41,7 @@ const Login = ({ ...props }) => {
             persistTokenAndRefreshToken(user?.accessToken, user?.refreshToken);
         }
 
-        props.dispatch(setLogin({
+        await props.dispatch(setLogin({
             accessToken: user?.accessToken,
             refreshToken: user?.refreshToken
         }))
@@ -50,7 +50,7 @@ const Login = ({ ...props }) => {
 
         await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me?.status && { status: 'online' }) });
 
-        props.dispatch(setLogin({
+        await props.dispatch(setLogin({
             accessToken: user?.accessToken,
             refreshToken: user?.refreshToken,
             ...me

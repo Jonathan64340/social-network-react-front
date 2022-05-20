@@ -20,7 +20,7 @@ const MessengerSidebar = ({ display, user }) => {
                     friendListTmp = friends;
                     const user_to_update = {
                         username: user?.username,
-                        sid: user?.sid,
+                        sid: socket.id,
                         status: user?.status,
                         _id: user?._id
                     }
@@ -33,15 +33,15 @@ const MessengerSidebar = ({ display, user }) => {
             if (friendListTmp.length > 0) {
                 for (let i = 0; i < friendListTmp.length; i++) {
                     if (friendListTmp[i]['friends_data']['_id'] === friends?._id) {
-                        if (friendListTmp[i]['friends_data'].sid) {
+                    
+                        if (friendListTmp[i]['friends_data']?.sid) {
                             friendListTmp[i]['friends_data'].sid = friends?.sid
                         } else {
-                            friendListTmp[i]['friends_data'] = { ...friendListTmp[[i]['friends_data']], sid: friends?.sid }
+                            friendListTmp[i]['friends_data'] = { ...friendListTmp[i]['friends_data'], sid: friends?.sid }
                         }
-
-                        if ((i + 1 === friendListTmp.length)) {
-                            setFriendList(friendListTmp);
-                        }
+                    }
+                    if ((i + 1 === friendListTmp.length)) {
+                        setFriendList(friendListTmp);
                     }
                 }
             }
@@ -51,7 +51,7 @@ const MessengerSidebar = ({ display, user }) => {
             socket.off('update_friends_list')
         }
         // eslint-disable-next-line
-    }, [display, user?._id])
+    }, [user?._id])
 
     const renderFriendsItem = () => {
         return (

@@ -31,6 +31,7 @@ const MessengerChat = memo(() => {
         const [tchat, setTchat] = useState([]);
         const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
+        const [_sid, setSid] = useState(sid);
 
         useEffect(() => {
             scrollToBottom()
@@ -42,16 +43,23 @@ const MessengerChat = memo(() => {
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
-                if (data?.from === sid) {
+                if (data?.from === _sid) {
                     setTchat(messages => [...messages, { ...data }].sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
                 }
             })
 
+            socket.on('update_friends_list', friends => {
+                if ((friends?._id === id)) {
+                    setSid(friends.sid)
+                }
+            })
+
             return () => {
-                socket.io.off('messenger');
+                socket.off('messenger');
+                socket.off('update_friends_list')
             }
             // eslint-disable-next-line
-        }, [])
+        }, [id])
 
         const handleChange = event => {
             event?.persist();
@@ -82,8 +90,8 @@ const MessengerChat = memo(() => {
                         setTchat(_chat => ([..._chat, { ...message }]));
                         setInitialValue('');
 
-                        if (typeof sid !== 'undefined') {
-                            socket.emit('messenger', { ...message, to: sid });
+                        if (typeof _sid !== 'undefined') {
+                            socket.emit('messenger', { ...message, to: _sid, from: socket.id });
                         }
                     })
                     .catch(() => setInitialValue(''))
