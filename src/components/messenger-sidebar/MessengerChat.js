@@ -1,6 +1,6 @@
 import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
 import { Avatar, Input, Tooltip } from 'antd';
-import React, { useMemo, memo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
