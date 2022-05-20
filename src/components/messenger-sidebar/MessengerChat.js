@@ -48,7 +48,7 @@ const MessengerChat = () => {
                 }
             })
 
-            EventEmitter().subscriber('messengerUpdateInformationUser', ({ id, username, sid, status }) => {
+            const messengerUpdateInformationUser = EventEmitter().subscriber('messengerUpdateInformationUser', ({ id, username, sid, status }) => {
                 // console.log({ id, username, sid, status })
                 setSid(sid)
             })
@@ -62,6 +62,7 @@ const MessengerChat = () => {
             return () => {
                 socket.off('messenger');
                 socket.off('update_friends_list');
+                messengerUpdateInformationUser.unsubscribe();
             }
             // eslint-disable-next-line
         }, [id])
