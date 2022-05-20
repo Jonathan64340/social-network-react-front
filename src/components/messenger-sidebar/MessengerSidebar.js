@@ -8,6 +8,7 @@ import { socket } from '../../index';
 
 const MessengerSidebar = ({ display, user }) => {
     const [friendList, setFriendList] = useState([]);
+    const [socketUpdater, setSocketUpdater] = useState({});
 
     let friendListTmp = [];
 
@@ -30,10 +31,11 @@ const MessengerSidebar = ({ display, user }) => {
         }
 
         socket.on('update_friends_list', friends => {
+            // if (socketUpdater === friends) return;
             if (friendListTmp.length > 0) {
                 for (let i = 0; i < friendListTmp.length; i++) {
                     if (friendListTmp[i]['friends_data']['_id'] === friends?._id) {
-                    
+                        
                         if (friendListTmp[i]['friends_data']?.sid) {
                             friendListTmp[i]['friends_data'].sid = friends?.sid
                         } else {
@@ -41,6 +43,7 @@ const MessengerSidebar = ({ display, user }) => {
                         }
                     }
                     if ((i + 1 === friendListTmp.length)) {
+                        setSocketUpdater(friends?._id);
                         setFriendList(friendListTmp);
                     }
                 }
@@ -51,7 +54,7 @@ const MessengerSidebar = ({ display, user }) => {
             socket.off('update_friends_list')
         }
         // eslint-disable-next-line
-    }, [user?._id, socket.id])
+    }, [user?._id, socket.id, socketUpdater])
 
     const renderFriendsItem = () => {
         return (
