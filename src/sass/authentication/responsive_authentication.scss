@@ -52,6 +52,7 @@
         // tablet
         @media screen and (max-width: 912px) {
             width: 100%;
+            min-width: 0;
             form {
                 width: 80%;
             }
