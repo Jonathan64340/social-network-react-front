@@ -57,8 +57,8 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     })
 
     socket.on('update_friend', (data) => {
-      if ((data?.senderId === props?.match?.params?.id) && (data?.status === 'pending')
-        || (data?.senderId === props?.match?.params?.id) && (data?.status === 'decline')
+      if (((data?.senderId === props?.match?.params?.id) && (data?.status === 'pending'))
+        || ((data?.senderId === props?.match?.params?.id) && (data?.status === 'decline'))
       ) {
         onReplyFriend(false);
         setViewUser(u => ({ ...u, ...data }));
