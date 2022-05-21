@@ -70,6 +70,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
       ...((_viewUser?.senderId === user?._id) && { status: 'decline' })
     }).then((data) => {
       if (data?.status === 'accept') {
+        EventEmitter().emit('friendsListSubscriber', { sid: _viewUser?._user?.sid, username: _viewUser?._user?.username, status: _viewUser?._user?.status, _id: _viewUser?._user?._id })
         onReplyFriend(true);
       } else {
         onReplyFriend(false);

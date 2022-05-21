@@ -49,7 +49,6 @@ const MessengerChat = () => {
             })
 
             const messengerUpdateInformationUser = EventEmitter().subscriber('messengerUpdateInformationUser', ({ id, username, sid, status }) => {
-                // console.log({ id, username, sid, status })
                 setSid(sid)
             })
 

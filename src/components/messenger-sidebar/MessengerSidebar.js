@@ -31,11 +31,10 @@ const MessengerSidebar = ({ display, user }) => {
         }
 
         socket.on('update_friends_list', friends => {
-            // if (socketUpdater === friends) return;
             if (friendListTmp.length > 0) {
                 for (let i = 0; i < friendListTmp.length; i++) {
                     if (friendListTmp[i]['friends_data']['_id'] === friends?._id) {
-                        
+
                         if (friendListTmp[i]['friends_data'].sid) {
                             friendListTmp[i]['friends_data'].sid = friends?.sid
                         } else {
@@ -48,11 +47,43 @@ const MessengerSidebar = ({ display, user }) => {
                         setFriendList(friendListTmp);
                     }
                 }
+            } else {
+                EventEmitter().emit('messengerUpdateInformationUser', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
+                setSocketUpdater(friends?.status);
+                setFriendList(f => [...friendListTmp, { ...friends }]);
             }
+        });
+
+        const friendsEventEmitter = EventEmitter().subscriber('friendsListSubscriber', ({ sid, username, status, _id }) => {
+            getFriends({ id: _id || user?._id })
+                .then(friends => {
+                    setFriendList(friends)
+                    // eslint-disable-next-line
+                    friendListTmp = friends;
+                    const user_to_update = {
+                        username: user?.username,
+                        sid: socket.id,
+                        status: user?.status,
+                        _id: user?._id
+                    }
+                    const user_friend_to_update = {
+                        username: username,
+                        sid: sid,
+                        status: status,
+                        _id: _id
+                    };
+                    // Emitter for me
+                    socket.emit('update_friends_list', { ...user_to_update, friends });
+
+                    // Emitter for friends request accept
+                    socket.broadcast.emit('update_friends_list', { ...user_friend_to_update, friends });
+                })
+                .catch(() => setFriendList(f => ([...f])))
         })
 
         return () => {
-            socket.off('update_friends_list')
+            socket.off('update_friends_list');
+            friendsEventEmitter.unsubscribe();
         }
         // eslint-disable-next-line
     }, [user?._id, socket.id, socketUpdater])
