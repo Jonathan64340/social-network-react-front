@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getUser } from '../../endpoints/profile/profile';
 import { withRouter } from 'react-router-dom';
 import i18n from '../../i18n';
+import { socket } from '../../index';
 import { getFriendRequest, sendFriendRequest, replyFriendRequest } from '../../endpoints/friend/friend';
 import { EventEmitter } from '../../utils/emitter';
 
@@ -48,6 +49,27 @@ const Header = ({ user, onReplyFriend, ...props }) => {
       }
     }
 
+    const friendStatusUpdate = EventEmitter().subscriber('friendStatusUpdate', ({ id }) => {
+      if (props?.match?.params?.id === id) {
+        onReplyFriend(true);
+        setViewUser(viewUser => ({ ...viewUser, status: 'accept' }));
+      }
+    })
+
+    socket.on('update_friend', (data) => {
+      if ((data?.senderId === props?.match?.params?.id) && (data?.status === 'pending')
+        || (data?.senderId === props?.match?.params?.id) && (data?.status === 'decline')
+      ) {
+        onReplyFriend(false);
+        setViewUser(u => ({ ...u, ...data }));
+      }
+    })
+
+    return () => {
+      friendStatusUpdate.unsubscribe();
+      socket.off('update_friend');
+    }
+
     // eslint-disable-next-line
   }, [props?.match?.params?.id, user])
 
@@ -56,8 +78,9 @@ const Header = ({ user, onReplyFriend, ...props }) => {
       senderId: user?._id,
       receiverId: props?.match?.params?.id,
       status: 'pending'
-    }).then((data) => {
+    }).then(async (data) => {
       setViewUser(u => ({ ...u, ...data, requestId: data?._id }))
+      socket.emit('update_friend', { ..._viewUser, ...data, requestId: data?._id })
     })
   }
 
@@ -73,6 +96,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
         EventEmitter().emit('friendsListSubscriber', { sid: _viewUser?._user?.sid, username: _viewUser?._user?.username, status: _viewUser?._user?.status, _id: _viewUser?._user?._id })
         onReplyFriend(true);
       } else {
+        socket.emit('update_friend', { ..._viewUser, ...data, requestId: data?._id })
         onReplyFriend(false);
       }
       setViewUser(u => ({ ...u, ...data }))

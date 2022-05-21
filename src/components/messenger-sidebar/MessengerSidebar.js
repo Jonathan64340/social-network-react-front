@@ -43,12 +43,14 @@ const MessengerSidebar = ({ display, user }) => {
                     }
                     if ((i + 1 === friendListTmp.length)) {
                         EventEmitter().emit('messengerUpdateInformationUser', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
+                        EventEmitter().emit('friendStatusUpdate', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
                         setSocketUpdater(friends?.status);
                         setFriendList(friendListTmp);
                     }
                 }
             } else {
                 EventEmitter().emit('messengerUpdateInformationUser', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
+                EventEmitter().emit('friendStatusUpdate', { id: friends?._id, username: friends?.username, sid: friends?.sid, status: friends?.status });
                 setSocketUpdater(friends?.status);
                 setFriendList(f => [...friendListTmp, { ...friends }]);
             }
@@ -76,7 +78,7 @@ const MessengerSidebar = ({ display, user }) => {
                     socket.emit('update_friends_list', { ...user_to_update, friends });
 
                     // Emitter for friends request accept
-                    socket.broadcast.emit('update_friends_list', { ...user_friend_to_update, friends });
+                    socket.emit('update_friends_list', { ...user_friend_to_update, friends });
                 })
                 .catch(() => setFriendList(f => ([...f])))
         })
