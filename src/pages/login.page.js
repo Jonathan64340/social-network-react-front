@@ -72,7 +72,7 @@ const Login = ({ ...props }) => {
             <Content className="authentication-layout">
                 <div className="form-login-content">
                     <div className="logo">
-                        <img src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+                        <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='' />
                     </div>
                     <Form
                         name="basic"
