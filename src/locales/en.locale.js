@@ -13,12 +13,16 @@ export const en =  {
                 "label": {
                     "username": "Username",
                     "password": "Password",
-                    "email": "E-mail address"
+                    "email": "E-mail address",
+                    "firstname": "Firstname",
+                    "lastname": "lastname"
                 },
                 "placeholder": {
                     "username": "John Doe",
                     "password": "****",
-                    "email": "johndoe@exemple.com"
+                    "email": "johndoe@exemple.com",
+                    "firstname": "Firstname",
+                    "lastname": "lastname"
                 }
             },
             "info": {
@@ -29,7 +33,8 @@ export const en =  {
                     "auth": {
                         "not_found_account": "This account does not exist",
                         "duplicated_account": "This account already exists",
-                        "error_register": "A serious error has occurred! Contact the author of the site domingues.jonathan95@gmail.com."
+                        "error_register": "A serious error has occurred! Contact the author of the site domingues.jonathan95@gmail.com.",
+                        "error": "An error has occurred, determine your fields"
                     }
                 }
             },

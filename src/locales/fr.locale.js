@@ -13,12 +13,16 @@ export const fr =  {
                 "label": {
                     "username": "Nom d'utilisateur",
                     "password": "Mot de passe",
-                    "email": "Adresse email"
+                    "email": "Adresse email",
+                    "lastname": "Nom",
+                    "firstname": "Prénom"
                 },
                 "placeholder": {
                     "username": "John Doe",
                     "password": "****",
-                    "email": "johndoe@exemple.com"
+                    "email": "johndoe@exemple.com",
+                    "lastname": "Brun",
+                    "firstname": "José"
                 }
             },
             "info": {
@@ -29,7 +33,8 @@ export const fr =  {
                     "auth": {
                         "not_found_account": "Ce compte n'existe pas",
                         "duplicated_account": "Ce compte existe déjà",
-                        "error_register": "Une erreur grave est survenue ! Contactez l'auteur du site domingues.jonathan95@gmail.com."
+                        "error_register": "Une erreur grave est survenue ! Contactez l'auteur du site domingues.jonathan95@gmail.com.",
+                        "error": "Une erreur est survenue, vérifiez vos champs"
                     }
                 }
             },

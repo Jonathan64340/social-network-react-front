@@ -9,7 +9,7 @@ import _ from 'underscore';
 import { Layout, Form, Input, Button, Checkbox } from 'antd';
 import { toast } from 'react-toastify';
 import { Helmet } from 'react-helmet';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { socket } from '../index';
 
 const { Content } = Layout;
@@ -70,38 +70,43 @@ const Login = ({ ...props }) => {
                 <title>{i18n.t('page.login.title_form')}</title>
             </Helmet>
             <Content className="authentication-layout">
-                <Form
-                    name="basic"
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                <div className="form-login-content">
+                    <div className="logo">
+                        <img src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+                    </div>
+                    <Form
+                        name="basic"
+                        initialValues={{ remember: true }}
+                        onFinish={onFinish}
+                        autoComplete="off"
                     >
-                        <Input placeholder={i18n.t('form.auth.label.username')} />
-                    </Form.Item>
+                        <Form.Item
+                            name="username"
+                            rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                        >
+                            <Input placeholder={i18n.t('form.auth.label.email')} />
+                        </Form.Item>
 
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: i18n.t('form.required.text') }]}
-                    >
-                        <Input.Password placeholder={i18n.t('form.auth.label.password')}
-                        />
-                    </Form.Item>
+                        <Form.Item
+                            name="password"
+                            rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                        >
+                            <Input.Password placeholder={i18n.t('form.auth.label.password')}
+                            />
+                        </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>{i18n.t('button.auth.label.remember_me')}</Checkbox>
-                    </Form.Item>
+                        <Form.Item name="remember" valuePropName="checked">
+                            <Checkbox>{i18n.t('button.auth.label.remember_me')}</Checkbox>
+                        </Form.Item>
 
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>
-                            {i18n.t('button.auth.label.login')}
-                        </Button>
-                    </Form.Item>
-                </Form>
+                        <Form.Item noStyle>
+                            <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })} ghost>
+                                {i18n.t('button.auth.label.login')}
+                            </Button>
+                            <Link to={'/register'}>{i18n.t('button.auth.label.register')}</Link>
+                        </Form.Item>
+                    </Form>
+                </div>
             </Content>
         </Layout>
     );

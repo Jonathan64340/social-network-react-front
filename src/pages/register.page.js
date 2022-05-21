@@ -9,7 +9,7 @@ import { getMe, updateUser } from '../endpoints/profile/profile';
 import _ from 'underscore';
 import { toast } from 'react-toastify';
 import { Helmet } from 'react-helmet';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { socket } from '../index';
 
 const { Content } = Layout;
@@ -22,9 +22,11 @@ const Register = ({ ...props }) => {
         setIsLoading(true);
         // eslint-disable-next-line no-console
         const user = await register({
-            email: data['email'],
-            password: data['password'],
-            username: data['username']
+            email: data['email'].trim(),
+            password: data['password'].trim(),
+            username: data['username'].trim(),
+            firstname: data['firstname'].trim(),
+            lastname: data['lastname'].trim()
         });
 
         setIsLoading(false);
@@ -44,12 +46,12 @@ const Register = ({ ...props }) => {
             persistTokenAndRefreshToken(user?.accessToken, user?.refreshToken);
         }
 
-        
+
         props.dispatch(setLogin({
             accessToken: user?.accessToken,
             refreshToken: user?.refreshToken
         }))
-        
+
         const me = await getMe();
 
         await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me?.status && { status: 'online' }) });
@@ -74,45 +76,66 @@ const Register = ({ ...props }) => {
                 <title>{i18n.t('page.register.title_form')}</title>
             </Helmet>
             <Content className="authentication-layout">
-                <Form
-                    name="basic-register"
-                    initialValues={{ remember: true }}
-                    onFinish={onFinish}
-                    autoComplete="off"
-                >
-                    <Form.Item
-                        name="email"
-                        rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                <div className="form-login-content">
+                    <div className="logo">
+                        <img src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+                    </div>
+                    <Form
+                        name="basic-register"
+                        initialValues={{ remember: true }}
+                        onFinish={onFinish}
+                        autoComplete="off"
                     >
-                        <Input placeholder={i18n.t('form.auth.label.email')} />
-                    </Form.Item>
+                        <Form.Item
+                            name="email"
+                            rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                        >
+                            <Input placeholder={i18n.t('form.auth.label.email')} type="email" />
+                        </Form.Item>
 
-                    <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: i18n.t('form.required.text') }]}
-                    >
-                        <Input placeholder={i18n.t('form.auth.label.username')} />
-                    </Form.Item>
+                        <Form.Item
+                            name="username"
+                            rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                        >
+                            <Input placeholder={i18n.t('form.auth.label.username')} type="text" />
+                        </Form.Item>
 
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: i18n.t('form.required.text') }]}
-                    >
-                        <Input.Password placeholder={i18n.t('form.auth.label.password')}
-                        />
-                    </Form.Item>
+                        <Form.Item noStyle>
+                            <Form.Item
+                                name="firstname"
+                                rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                            >
+                                <Input placeholder={i18n.t('form.auth.label.firstname')} type="text" />
+                            </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>{i18n.t('button.auth.label.remember_me')}</Checkbox>
-                    </Form.Item>
+                            <Form.Item
+                                name="lastname"
+                                rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                            >
+                                <Input placeholder={i18n.t('form.auth.label.lastname')} type="text" />
+                            </Form.Item>
+                        </Form.Item>
 
+                        <Form.Item
+                            name="password"
+                            rules={[{ required: true, message: i18n.t('form.required.text') }]}
+                        >
+                            <Input.Password placeholder={i18n.t('form.auth.label.password')}
+                            />
+                        </Form.Item>
 
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>
-                            {i18n.t('button.auth.label.login')}
-                        </Button>
-                    </Form.Item>
-                </Form>
+                        <Form.Item name="remember" valuePropName="checked">
+                            <Checkbox>{i18n.t('button.auth.label.remember_me')}</Checkbox>
+                        </Form.Item>
+
+                        <Form.Item noStyle>
+                            <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })} ghost>
+                                {i18n.t('button.auth.label.register')}
+                            </Button>
+                            <Link to={'/login'}>{i18n.t('button.auth.label.login')}</Link>
+                        </Form.Item>
+                    </Form>
+                </div>
             </Content>
         </Layout>
     );

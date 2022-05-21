@@ -14,9 +14,19 @@
         align-items: center;
         display: flex;
         justify-content: center;
+        transition: all 1s ease;
+
         img {
             width: 80%;
             margin-bottom: 20%;
+        }
+
+        // tablet
+        @media screen and (max-width: 912px) {
+            width: 80%;
+            img {
+                width: 70%;
+            }
         }
     }
 
@@ -38,7 +48,14 @@
             flex-direction: column;
             width: 100%;
         }
+
+        // tablet
+        @media screen and (max-width: 912px) {
+            width: 100%;
+            form {
+                width: 80%;
+            }
+        }
+
     }
 }
-
-@import './responsive_authentication.scss';
