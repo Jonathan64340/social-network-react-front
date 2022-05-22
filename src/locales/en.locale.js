@@ -71,6 +71,22 @@ export const en =  {
                     "like": "Like",
                     "share": "Share"
                 }
+            },
+            "file": {
+                "picture": {
+                    "profile": {
+                        "change": "Change your profile picture",
+                        "delete": "Delete your profile picture"
+                    },
+                    "cover": {
+                        "change": "Change your cover photo",
+                        "delete": "Delete your cover photo"
+                    },
+                    "common": {
+                        "send": "Send a photo",
+                        "delete": "Delete picture"
+                    }
+                }
             }
         },
         "publication": {

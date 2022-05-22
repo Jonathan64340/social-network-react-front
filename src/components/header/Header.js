@@ -7,6 +7,7 @@ import i18n from '../../i18n';
 import { socket } from '../../index';
 import { getFriendRequest, sendFriendRequest, replyFriendRequest } from '../../endpoints/friend/friend';
 import { EventEmitter } from '../../utils/emitter';
+import UploadFile from '../upload/Upload';
 
 const Header = ({ user, onReplyFriend, ...props }) => {
   const [_viewUser, setViewUser] = useState({});
@@ -107,12 +108,34 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username, sid: _viewUser?.sid });
   }
 
+  const uploadProps = {
+    name: 'file',
+    action: '',
+    headers: {
+      authorization: 'authorization-text',
+    },
+
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+
+      if (info.file.status === 'done') {
+      } else if (info.file.status === 'error') {
+      }
+    },
+  }
+
   return <div className="header-container">
     <div className="header-container-background-cover" style={{
       background: "url(https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg)"
     }}>
+      <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps} />
       <div className="header-container-profile">
         <Avatar src="https://joeschmoe.io/api/v1/random" className="header-container-avatar" />
+        <div className="profile-picture-container">
+          <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps} />
+        </div>
         <div className="header-container-profile-name">
           <span>{_viewUser?.username || user?.username}</span>
         </div>
