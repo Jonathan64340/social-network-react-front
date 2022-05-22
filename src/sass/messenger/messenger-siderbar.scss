@@ -97,6 +97,8 @@
             position: relative;
             padding: 16px 16px 16px 16px;
             border-bottom: 1px solid $color-header-toolbar-primary;
+            display: flex;
+            align-items: center;
             &:hover {
                 cursor: pointer;
                 background-color: $color-medium-black;
@@ -123,6 +125,11 @@
                 border: 3px solid $color-light-black;
                 box-shadow: 0 0 2px black;
                 margin-right: 6px;
+            }
+            &-container-siderbar {
+                display: flex;
+                flex-direction: column;
+                line-height: 12px;
             }
         }
     }

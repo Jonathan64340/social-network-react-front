@@ -131,6 +131,11 @@ export const fr =  {
                 "friend_request_pending_receiver_accept": "accepté",
                 "friend_is_friend": "ami"
             }
+        },
+        "time": {
+            "connection": {
+                "last_friend_login": "En ligne"
+            }
         }
     }
 }

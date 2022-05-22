@@ -5,6 +5,7 @@ import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import { socket } from '../../index';
+import { momentCustom as moment } from '../../_helper/moment_custom';
 
 const MessengerSidebar = ({ display, user }) => {
     const [friendList, setFriendList] = useState([]);
@@ -98,7 +99,13 @@ const MessengerSidebar = ({ display, user }) => {
                         {friends_data?.status === 'online' && <span className='online-tick'></span>}
                         {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
                         <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
-                        <span>{friends_data?.username}</span>
+                        <div className="friend-item-container-siderbar">
+                            <span>{friends_data?.username}</span>
+                            {((friends_data?.last_login + 24 * 60 * 60 * 1000) > new Date().getTime() && friends_data?.status !== 'online') ? 
+                            <small>{i18n.t('time.connection.last_friend_login')} {moment({ date: friends_data?.last_login, fromNowDisplay: true })}</small>
+                            : <small>{i18n.t('time.connection.last_friend_login')}</small>
+                        }
+                        </div>
                     </div>
                 ))}
             </div>

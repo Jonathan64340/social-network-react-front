@@ -1,4 +1,4 @@
-export const en =  {
+export const en = {
     "translation": {
         "page": {
             "login": {
@@ -130,6 +130,11 @@ export const en =  {
                 "friend_request_pending_receiver_decline": "decline",
                 "friend_request_pending_receiver_accept": "accept",
                 "friend_is_friend": "friend",
+            }
+        },
+        "time": {
+            "connection": {
+                "last_friend_login": "Alive"
             }
         }
     }
