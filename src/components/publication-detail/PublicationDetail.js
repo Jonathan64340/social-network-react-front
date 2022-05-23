@@ -69,7 +69,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
             </>
         }
         >
-            <p style={{ display: 'flex', flexDirection: 'column-reverse'}}>{<CustomRenderElement string={content} type={'publication'} />}</p>
+            <div style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>{<CustomRenderElement string={content} type={'publication'} />}</div>
             {(props?.match?.path === "/" || canPostOrComment) && <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />}
         </Card>
     );

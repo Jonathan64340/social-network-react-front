@@ -74,7 +74,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
                                             : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
                                     </small>
                                 </div>
-                                <p style={{ display: 'flex', flexDirection: 'column-reverse'}}>{<CustomRenderElement string={item?.content} type={'publication'} />}</p>
+                                <p style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>{<CustomRenderElement string={item?.content} type={'publication'} />}</p>
                             </div>}
                     />
                 </List.Item>

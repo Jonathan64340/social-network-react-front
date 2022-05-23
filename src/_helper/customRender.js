@@ -20,11 +20,12 @@ const CustomRenderElement = ({ string, type }) => {
     if (typeof ytId !== 'undefined') {
       if (string.match(youtubeRegex)) {
         ytId = ytId[1]
-        return <div>
+        return <div style={{ marginTop: 10 }}>
           {type === 'publication' && (<div><span>{ytId[1].substr(12)}</span></div>)}
           <div className="video-wrapper">
             <div className="video">
               <iframe
+                style={{ height: (window.innerHeight / 2)}}
                 title="Vidéo"
                 className="video-frame"
                 src={`https://www.youtube.com/embed/${ytId}`}
