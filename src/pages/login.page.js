@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { login } from '../endpoints/authentication/authentication';
 import { getMe, updateUser } from '../endpoints/profile/profile';
@@ -16,6 +16,19 @@ const { Content } = Layout;
 
 const Login = ({ ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [socketIdFilled, setSocketIdFilled] = useState(null);
+    const [updateComponentTime, setUpdateComponentTime] = useState(new Date().getTime());
+
+    useEffect(() => {
+        const updateComponentTimeInterval = setInterval(() => {
+            if (socket.id) {
+                setSocketIdFilled(socket.id);
+                clearInterval(updateComponentTimeInterval);
+            } else {
+                setUpdateComponentTime(new Date().getTime());
+            }
+        }, 1000)
+    }, [updateComponentTime])
 
     const handleSubmit = async (event) => {
 
@@ -48,7 +61,7 @@ const Login = ({ ...props }) => {
 
         const me = await getMe();
 
-        await updateUser({ ...me, sid: socket.id, type: 'login', status: 'online' });
+        await updateUser({ ...me, sid: socketIdFilled, type: 'login', status: 'online' });
 
         await props.dispatch(setLogin({
             accessToken: user?.accessToken,
@@ -100,7 +113,7 @@ const Login = ({ ...props }) => {
                         </Form.Item>
 
                         <Form.Item noStyle>
-                            <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })} ghost>
+                            <Button type="primary" htmlType="submit" disabled={!socketIdFilled ? true : false} {...(isLoading ? { loading: true } : { loading: false })} ghost>
                                 {i18n.t('button.auth.label.login')}
                             </Button>
                             <Link to={'/register'}>{i18n.t('button.auth.label.register')}</Link>

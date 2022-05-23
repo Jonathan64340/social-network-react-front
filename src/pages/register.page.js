@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { register } from '../endpoints/authentication/authentication';
 import { persistTokenAndRefreshToken } from '../utils/persist.login';
@@ -16,6 +16,19 @@ const { Content } = Layout;
 
 const Register = ({ ...props }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [socketIdFilled, setSocketIdFilled] = useState(null);
+    const [updateComponentTime, setUpdateComponentTime] = useState(new Date().getTime());
+
+    useEffect(() => {
+        const updateComponentTimeInterval = setInterval(() => {
+            if (socket.id) {
+                setSocketIdFilled(socket.id);
+                clearInterval(updateComponentTimeInterval);
+            } else {
+                setUpdateComponentTime(new Date().getTime());
+            }
+        }, 1000)
+    }, [updateComponentTime])
 
     const handleSubmit = async (event) => {
         const data = event;
@@ -26,7 +39,8 @@ const Register = ({ ...props }) => {
             password: data['password'].trim(),
             username: data['username'].trim(),
             firstname: data['firstname'].trim(),
-            lastname: data['lastname'].trim()
+            lastname: data['lastname'].trim(),
+            sid: socketIdFilled
         });
 
         setIsLoading(false);
@@ -54,7 +68,7 @@ const Register = ({ ...props }) => {
 
         const me = await getMe();
 
-        await updateUser({ ...me, sid: socket.id, type: 'login', ...(!me?.status && { status: 'online' }) });
+        await updateUser({ ...me, sid: socketIdFilled, type: 'login', ...(!me?.status && { status: 'online' }) });
 
         props.dispatch(setLogin({
             accessToken: user?.accessToken,
@@ -129,7 +143,7 @@ const Register = ({ ...props }) => {
                         </Form.Item>
 
                         <Form.Item noStyle>
-                            <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })} ghost>
+                            <Button type="primary" htmlType="submit" disabled={!socketIdFilled ? true : false} {...(isLoading ? { loading: true } : { loading: false })} ghost>
                                 {i18n.t('button.auth.label.register')}
                             </Button>
                             <Link to={'/login'}>{i18n.t('button.auth.label.login')}</Link>

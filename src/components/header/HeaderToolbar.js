@@ -12,10 +12,12 @@ const HeaderToolbar = ({ user, ...props }) => {
 
     const _getUserList = query => {
         if (!listUser.length) setListUser([]);
-        getUserList(query).then(res => {
-            setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
-        })
-            .catch(err => console.log(err))
+        if (query.length >= 3) {
+            getUserList(query).then(res => {
+                setListUser(res.filter(listUser => listUser?._id !== user?._id && listUser));
+            })
+                .catch(err => console.log(err))
+        }
     }
 
     // eslint-disable-next-line
