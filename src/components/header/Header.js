@@ -130,11 +130,11 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     <div className="header-container-background-cover" style={{
       background: "url(https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg)"
     }}>
-      <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps} />
+      {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps} />}
       <div className="header-container-profile">
         <Avatar src="https://joeschmoe.io/api/v1/random" className="header-container-avatar" />
         <div className="profile-picture-container">
-          <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps} />
+          {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps} />}
         </div>
         <div className="header-container-profile-name">
           <span>{_viewUser?.username || user?.username}</span>
