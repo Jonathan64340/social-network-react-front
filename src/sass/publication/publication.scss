@@ -7,13 +7,23 @@
         max-width: 1000px;
         margin: auto;
     
-        .meta-card .ant-card-body {
-            padding: 10px 20px;
-    
-            p {
-                font-size: 0.8rem;;
+        .meta-card {
+            .video-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 0 3px 0px $secondary-color;
+            }
+            .ant-card-body {
+                padding: 10px 20px;
+        
+                p {
+                    font-size: 0.8rem;;
+                }
             }
         }
+        
     
         .ant-card.ant-card-bordered {
             padding: 20px;

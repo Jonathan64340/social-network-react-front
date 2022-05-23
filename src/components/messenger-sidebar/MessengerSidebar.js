@@ -104,6 +104,7 @@ const MessengerSidebar = ({ display, user }) => {
                     }
                 }
             }, (1000 * 60))
+            // eslint-disable-next-line
         }, [])
 
         return (

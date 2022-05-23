@@ -6,7 +6,7 @@ import reactStringReplace from "react-string-replace";
  * @param {String} String
  * @description - Can return simple string or string with regex for parsing url
  */
-const CustomRenderElement = ({ string }) => {
+const CustomRenderElement = ({ string, type }) => {
   const regex = new RegExp(
     /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/g
   );
@@ -20,15 +20,17 @@ const CustomRenderElement = ({ string }) => {
     if (typeof ytId !== 'undefined') {
       if (string.match(youtubeRegex)) {
         ytId = ytId[1]
-        
-        return <div className="video-wrapper">
-          <div className="video">
-            <iframe
-              title="Vidéo"
-              className="video-frame"
-              src={`https://www.youtube.com/embed/${ytId}`}
-              allowFullScreen
-            />
+        return <div>
+          {type === 'publication' && (<div><span>{ytId[1].substr(12)}</span></div>)}
+          <div className="video-wrapper">
+            <div className="video">
+              <iframe
+                title="Vidéo"
+                className="video-frame"
+                src={`https://www.youtube.com/embed/${ytId}`}
+                allowFullScreen
+              />
+            </div>
           </div>
         </div>
       }

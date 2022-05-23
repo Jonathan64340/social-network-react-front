@@ -55,6 +55,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
 
     return (<div className="comment-component-container textarea-no-border">
         <List dataSource={rawData?.comments?.data}
+            locale={{ emptyText: (<div></div>) }}
             renderItem={(item) => (
                 <List.Item>
                     <List.Item.Meta

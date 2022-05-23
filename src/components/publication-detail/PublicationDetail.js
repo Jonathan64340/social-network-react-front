@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import CommentComponent from '../comment-component/CommentComponent';
 import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
+import CustomRenderElement from '../../_helper/customRender';
 const { Meta } = Card;
 
 const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData, canPostOrComment, ...props }) => {
@@ -68,7 +69,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
             </>
         }
         >
-            <p>{content}</p>
+            <p style={{ display: 'flex', flexDirection: 'column-reverse'}}>{<CustomRenderElement string={content} type={'publication'} />}</p>
             {(props?.match?.path === "/" || canPostOrComment) && <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />}
         </Card>
     );
