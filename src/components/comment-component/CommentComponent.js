@@ -5,6 +5,7 @@ import { addComment, deleteComment } from '../../endpoints/publication/publicati
 import i18n from '../../i18n';
 import { momentCustom as moment } from '../../_helper/moment_custom';
 import { connect } from 'react-redux';
+import CustomRenderElement from '../../_helper/customRender';
 
 const { TextArea } = Input;
 
@@ -73,7 +74,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
                                             : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
                                     </small>
                                 </div>
-                                <p>{item.content}</p>
+                                <p style={{ display: 'flex', flexDirection: 'column-reverse'}}>{<CustomRenderElement string={item?.content} type={'publication'} />}</p>
                             </div>}
                     />
                 </List.Item>
