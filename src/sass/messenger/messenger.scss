@@ -34,19 +34,18 @@
 .messenger-chat-item-container .item-message.sender .link-message {
     color: white;
     text-decoration: underline;
-    word-break: break-all;
 }
 
 .messenger-chat-item-container .item-message.receiver .link-message {
     color: rgb(0, 0, 0);
     text-decoration: underline;
-    word-break: break-all;
 }
 
 .messenger-chat-item-container .item-message.receiver {
     padding: 2px 0;
     display: flex;
     margin-left: 10px;
+    margin-right: 10px;
     flex-direction: row;
     justify-content: flex-start;
     position: relative;
@@ -57,7 +56,6 @@
 }
 
 .messenger-chat-item-container .content-item-tchat {
-    word-break: break-all;
 }
 
 .messenger-chat-item-container .content-item-tchat::after {
