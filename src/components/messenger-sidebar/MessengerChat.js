@@ -1,5 +1,5 @@
 import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
-import { Avatar, Input, Tooltip } from 'antd';
+import { Avatar, Input, Tooltip, Form } from 'antd';
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import CustomRenderElement from '../../_helper/customRender';
 import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
 import { store, socket } from '../../index';
 import { uniqueId } from 'underscore';
+import i18n from '../../i18n';
 
 const MessengerChat = () => {
     let viewedConversations = [];
@@ -29,9 +30,9 @@ const MessengerChat = () => {
 
     const MessengerChatItem = ({ id, sid, name }) => {
         const [tchat, setTchat] = useState([]);
-        const [initialValue, setInitialValue] = useState('');
         const user = store.getState()?.user;
         const [_sid, setSid] = useState(sid);
+        const [form] = Form.useForm();
 
         useEffect(() => {
             scrollToBottom()
@@ -66,41 +67,35 @@ const MessengerChat = () => {
             // eslint-disable-next-line
         }, [id])
 
-        const handleChange = event => {
-            event?.persist();
-            setInitialValue(event?.currentTarget?.value);
-        }
-
         /**
          * 
          * @param {*} event 
          * context, senderId, receiverId, type, content
          */
         const sendMessage = async event => {
-            event?.persist();
 
-            if (event?.keyCode === 13) {
-                const payload = {
-                    context: [id, user?._id],
-                    senderId: user?._id,
-                    receiverId: id,
-                    type: 'string',
-                    content: {
-                        message: initialValue || uniqueId('Test_')
+            const payload = {
+                context: [id, user?._id],
+                senderId: user?._id,
+                receiverId: id,
+                type: 'string',
+                content: {
+                    message: event?.input
+                }
+            };
+
+            _sendMessage(payload)
+                .then(message => {
+                    setTchat(_chat => ([..._chat, { ...message }]));
+                    form.setFieldsValue({
+                        'input': ''
+                    });
+
+                    if (typeof _sid !== 'undefined') {
+                        socket.emit('messenger', { ...message, to: _sid, from: socket.id });
                     }
-                };
-
-                _sendMessage(payload)
-                    .then(message => {
-                        setTchat(_chat => ([..._chat, { ...message }]));
-                        setInitialValue('');
-
-                        if (typeof _sid !== 'undefined') {
-                            socket.emit('messenger', { ...message, to: _sid, from: socket.id });
-                        }
-                    })
-                    .catch(() => setInitialValue(''))
-            }
+                })
+                .catch((e) => console.log(e))
         }
 
         return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} collapsed={"opened"}>
@@ -142,7 +137,11 @@ const MessengerChat = () => {
                 <div ref={messagesEndRef} />
             </div>
             <div className='messenger-chat-item-footer'>
-                <Input type={'text'} value={initialValue} onChange={handleChange} size='small' bordered={false} width='100%' onKeyUp={sendMessage} placeholder='Ecrire un message...' />
+                <Form form={form} onFinish={sendMessage}>
+                    <Form.Item name="input" initialValue={''} rules={[{ required: true, message: i18n.t('form.required.text') }]}>
+                        <Input type={'text'} size='small' bordered={false} width='100%' placeholder='Ecrire un message...' />
+                    </Form.Item>
+                </Form>
             </div>
         </div>)
     }
