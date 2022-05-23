@@ -46,21 +46,17 @@
             .profile-picture-upload {
                 position: absolute;
                 bottom: -50px;
-                right: 20px;
+                right: 30px;
                 border-radius: 100%;
                 background: $color-light-white;
-                width: 40px;
-                height: 40px;
+                width: 25px;
+                height: 25px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: .6s ease-in-out all;
                 border: 2px solid #f8f8f8f8;
                 box-shadow: 0 0 5px black;
-
-                svg {
-                    font-size: 1.2em;
-                }
 
                 &:hover {
                     cursor: pointer;
