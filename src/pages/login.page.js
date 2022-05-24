@@ -80,7 +80,7 @@ const Login = ({ ...props }) => {
     return (
         <Layout>
             <Helmet>
-                <title>{i18n.t('page.login.title_form')}</title>
+                <title>MYUN-BOOK - {i18n.t('page.login.title_form')}</title>
             </Helmet>
             <Content className="authentication-layout">
                 <div className="form-login-content">
@@ -119,6 +119,11 @@ const Login = ({ ...props }) => {
                             <Link to={'/register'}>{i18n.t('button.auth.label.register')}</Link>
                         </Form.Item>
                     </Form>
+                </div>
+                <div className="description-container">
+                    <header>
+                        <h1>Gardez le contact avec vos proches et vos amis</h1>
+                    </header>
                 </div>
             </Content>
         </Layout>

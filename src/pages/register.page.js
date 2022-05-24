@@ -87,7 +87,7 @@ const Register = ({ ...props }) => {
     return (
         <Layout>
             <Helmet>
-                <title>{i18n.t('page.register.title_form')}</title>
+                <title>MYUN-BOOK - {i18n.t('page.register.title_form')}</title>
             </Helmet>
             <Content className="authentication-layout">
                 <div className="form-login-content">

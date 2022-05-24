@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
 import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
 import { store, socket } from '../../index';
-import { uniqueId } from 'underscore';
 import i18n from '../../i18n';
 
 const MessengerChat = () => {
@@ -98,6 +97,38 @@ const MessengerChat = () => {
                 .catch((e) => console.log(e))
         }
 
+        // eslint-disable-next-line
+        const RenderChat = useMemo(() => {
+
+            return <>
+                {
+                    tchat.map((el, index) => (
+                        <div key={index} className="content-item-tchat">
+                            <div className={`item-message ${(user?._id === el?.senderId) ? 'sender' : 'receiver'}`} >
+                                {((el?.senderId && user?._id) !== el?.senderId) && (
+                                    <>
+                                        {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
+                                            <div className="content-avatar">
+                                                <Avatar size="small" src={""}>
+                                                    {name.length > 1 ? name.substring(0, name.length - (name.length - 1)) : name}
+                                                </Avatar>
+                                            </div>
+                                        }
+                                    </>)}
+                                {el?.type === 'string' ? <Tooltip>
+                                    <div className={`content-box-message ${tchat[index]?.senderId === tchat[index + 1]?.senderId ? 'continue' : 'stop'} 
+                        ${tchat[index - 1]?.senderId === tchat[index + 1]?.senderId ? 'continue-normalize' : 'stop-normalize'}`}>
+                                        <p><CustomRenderElement string={el?.content?.message} /></p>
+                                    </div>
+                                </Tooltip> : <></>
+                                }
+                            </div>
+                        </div>
+                    ))
+                }
+            </>
+        })
+
         return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} collapsed={"opened"}>
             <div className='messenger-chat-item-header'>
                 <div className='messenger-chat-item-header-title'>
@@ -113,27 +144,7 @@ const MessengerChat = () => {
                 </div>
             </div>
             <div className='messenger-chat-item-content'>
-                {tchat.map((el, index) => (<div key={uniqueId('item_content_')} className="content-item-tchat">
-                    <div className={`item-message ${(user?._id === el?.senderId) ? 'sender' : 'receiver'}`} >
-                        {((el?.senderId && user?._id) !== el?.senderId) && (
-                            <>
-                                {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
-                                    <div className="content-avatar">
-                                        <Avatar size="small" src={""}>
-                                            {name.length > 1 ? name.substring(0, name.length - (name.length - 1)) : name}
-                                        </Avatar>
-                                    </div>
-                                }
-                            </>)}
-                        {el?.type === 'string' ? <Tooltip>
-                            <div className={`content-box-message ${tchat[index]?.senderId === tchat[index + 1]?.senderId ? 'continue' : 'stop'} 
-                                ${tchat[index - 1]?.senderId === tchat[index + 1]?.senderId ? 'continue-normalize' : 'stop-normalize'}`}>
-                                <p><CustomRenderElement string={el?.content?.message} /></p>
-                            </div>
-                        </Tooltip> : <></>
-                        }
-                    </div>
-                </div>))}
+                {RenderChat}
                 <div ref={messagesEndRef} />
             </div>
             <div className='messenger-chat-item-footer'>
