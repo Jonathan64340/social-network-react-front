@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Input, Form, Button, List, Avatar, Dropdown, Menu, Popconfirm, Tooltip } from 'antd';
-import { MoreOutlined, EditOutlined, DeleteOutlined, HeartFilled } from '@ant-design/icons';
+import { Input, Form, Button, List, Avatar, Dropdown, Menu, Popconfirm, Tooltip, Comment } from 'antd';
+import { MoreOutlined, EditOutlined, DeleteOutlined, DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
 import { addComment, deleteComment } from '../../endpoints/publication/publication';
 import i18n from '../../i18n';
 import { momentCustom as moment } from '../../_helper/moment_custom';
 import { connect } from 'react-redux';
 import CustomRenderElement from '../../_helper/customRender';
+import { Link, withRouter } from 'react-router-dom';
+import _ from 'underscore';
 
 const { TextArea } = Input;
 
-const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onEditComment }) => {
+const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onEditComment, onLike, onDislike }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
 
@@ -35,6 +37,24 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
         onDeleteComment({ publicationId: rawData?._id, commentId: id });
     }
 
+    const actions = (item) => [
+        <div className="action-comments-container">
+            <Tooltip key="comment-basic-like" title={i18n.t('button.tooltip.label.like')}>
+                <span onClick={() => onLike({ ...item, type: 'like' })}>
+                    {React.createElement(item?.comment?.like?.includes(rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id) === 'liked' ? LikeFilled : LikeOutlined)}
+                    <span className="comment-action">{item?.comment?.likes.length || 0}</span>
+                </span>
+            </Tooltip>
+            <Tooltip key="comment-basic-dislike" title={i18n.t('button.tooltip.label.dislike')}>
+                <span onClick={() => onDislike({ ...item, type: 'dislike' })}>
+                    {React.createElement(item?.comment?.like?.includes(rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id) === 'disliked' ? DislikeFilled : DislikeOutlined)}
+                    <span className="comment-action">{item?.comment?.dislike.length || 0}</span>
+                </span>
+            </Tooltip>
+        </div>,
+        <Dropdown.Button trigger={['click']} overlay={(user?._id === item?.ownerId || user?._id === rawData?.ownerId) ? menu(item?._id, item?.ownerId, item) : <Menu />} icon={(user?._id === item?.ownerId || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text"></Dropdown.Button>
+    ];
+
     const menu = (id, ownerId, _rawData) =>
     (<Menu>
         {user?._id === ownerId && <Menu.Item key="edit" onClick={() => onEditComment({ ..._rawData })} icon={<EditOutlined />}>
@@ -54,42 +74,55 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
     </Menu>
     );
 
+    const Editor = ({ submitting }) => (
+        <Form form={form} onFinish={onFinish}>
+            <Form.Item name="comment" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
+                <TextArea placeholder={i18n.t('publication.comment.drop_comment')} allowClear autoSize={{ minRows: 4 }} />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" loading={submitting} htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
+            </Form.Item>
+        </Form>
+    );
+
     return (<div className="comment-component-container textarea-no-border">
         <List dataSource={rawData?.comments?.data}
             locale={{ emptyText: (<div></div>) }}
             renderItem={(item) => (
-                <List.Item>
-                    <List.Item.Meta
-                        avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                        title={<div className="meta-container">
-                            <span>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</span>
-                            <Dropdown.Button trigger={['click']} overlay={(user?._id === item?.ownerId || user?._id === rawData?.ownerId ) ? menu(item?._id, item?.ownerId, item) : <Menu />} icon={(user?._id === item?.ownerId || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip></Dropdown.Button>
-                        </div>}
-                        description={
-                            <div className="meta-content-description">
-                                <div className="meta-description">
-                                    <small>
-                                        {item?.createdAt === item?.modifiedAt ?
-                                            moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })
-                                            : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}
-                                    </small>
-                                </div>
-                                <p style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>{<CustomRenderElement string={item?.content} type={'publication'} />}</p>
-                            </div>}
+                <List>
+                    <Comment
+                        actions={actions(item)}
+                        author={<Link to={`/profile/${rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id}`}>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</Link>}
+                        avatar={<Link to={`/profile/${rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id}`}><Avatar src="https://joeschmoe.io/api/v1/random" alt={rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username} /></Link>}
+                        content={
+                            <p style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>
+                                {<CustomRenderElement string={item?.content} type={'publication'} />}
+                            </p>
+                        }
+                        datetime={
+                            <Tooltip title={item?.createdAt === item?.modifiedAt ?
+                                moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })
+                                : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}>
+                                <span>{item?.createdAt === item?.modifiedAt ?
+                                    moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })
+                                    : <>{moment({ date: item?.createdAt, fromNowDisplay: true, format: 'llll' })} &bull; {i18n.t('publication.description.modified')}</>}</span>
+                            </Tooltip>
+                        }
                     />
-                </List.Item>
+                </List>
             )}>
         </List>
-        <Form form={form} onFinish={onFinish}>
-            <Form.Item name="comment" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
-                <TextArea placeholder={i18n.t('publication.comment.drop_comment')} allowClear autoSize={{ minRows: 1, maxRows: 5 }} />
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" {...(isLoading ? { loading: true } : { loading: false })}>{i18n.t('button.publication.label.publication')}</Button>
-            </Form.Item>
-        </Form>
+
+        <Comment
+            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+            content={
+                <Editor
+                    submitting={isLoading}
+                />
+            }
+        />
     </div>)
 }
 
 const mapStateToProps = ({ user }) => ({ user });
-export default connect(mapStateToProps)(CommentComponent);
+export default _.compose(connect(mapStateToProps), withRouter)(CommentComponent);

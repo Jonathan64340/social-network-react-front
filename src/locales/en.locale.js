@@ -69,6 +69,7 @@ export const en = {
             "tooltip": {
                 "label": {
                     "like": "Like",
+                    "dislike": "Dislike",
                     "share": "Share"
                 }
             },

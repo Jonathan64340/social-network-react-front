@@ -54,7 +54,16 @@
             }
     
             .comment-component-container {
-                
+                .ant-comment-actions {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    li:first-child {
+                        span {
+                            margin: 0 2px;
+                        }
+                    }
+                }
             }
     
         }

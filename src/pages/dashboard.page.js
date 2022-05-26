@@ -61,8 +61,24 @@ const Dashboard = ({ user, ...props }) => {
         }
     }
 
+    const onLike = async (payload) => {
+        if (payload !== {}) {
+            console.log(payload)
+            setCurrent({ ...payload });
+        }
+    }
+
+    const onDislike = async (payload) => {
+        if (payload !== {}) {
+            setCurrent({ ...payload });
+        }
+    }
+
     const handleEdit = async (payload) => {
         if (payload !== {} || payload?._id) {
+            if ((payload?.type === 'like') || (payload?.type === 'dislike')) {
+                return alert('ok')
+            }
             if (payload?.type === 'edit-publication') {
                 delete payload?.type;
                 const _publication = (publication.length > 1 ? publication.reverse() : publication);
@@ -170,6 +186,8 @@ const Dashboard = ({ user, ...props }) => {
                         onCreateComment={onCreateComment}
                         onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
                         onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
+                        onLike={(rawData) => onLike({ ...rawData, type: 'edit-comment' })}
+                        onDislike={(rawData) => onDislike({ ...rawData, type: 'edit-comment' })}
                         rawData={_publication}
                         canPostOrComment={canPostOrComment}
                         key={index}

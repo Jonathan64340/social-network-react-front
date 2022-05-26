@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreOutlined, EditOutlined, DeleteOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
+import { MoreOutlined, EditOutlined, DeleteOutlined, DislikeFilled, DislikeOutlined, LikeOutlined, LikeFilled, ShareAltOutlined } from '@ant-design/icons';
 import i18n from '../../i18n';
 import { momentCustom as moment } from '../../_helper/moment_custom';
 import { Card, Avatar, Menu, Popconfirm, Dropdown, Tooltip } from 'antd';
@@ -11,7 +11,7 @@ import _ from 'underscore';
 import CustomRenderElement from '../../_helper/customRender';
 const { Meta } = Card;
 
-const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, time, onEdit, rawData, canPostOrComment, ...props }) => {
+const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCreateComment, onEditComment, onLike, onDislike, time, onEdit, rawData, canPostOrComment, ...props }) => {
     const handleMenuClick = (e) => {
         switch (e.key) {
             case 'edit':
@@ -56,7 +56,23 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={<div className="meta-container">
                         <span>{rawData?.user?.username}</span>
-                        <Dropdown.Button trigger={['click']} overlay={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? menu : <Menu />} icon={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text"><Tooltip title={i18n.t('button.tooltip.label.like')}><HeartFilled /></Tooltip><Tooltip title={i18n.t('button.tooltip.label.share')}><ShareAltOutlined /></Tooltip></Dropdown.Button>
+                        <Dropdown.Button trigger={['click']} overlay={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? menu : <Menu />} icon={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text">
+                            <Tooltip key="comment-basic-like" title={i18n.t('button.tooltip.label.like')}>
+                                <span onClick={() => onLike({ ...rawData, type: 'like' })} style={{ marginRight: 10 }}>
+                                    {React.createElement(rawData?.comment?.like?.includes(rawData?.comments?.user?.filter((u) => u?._id === rawData?.ownerId && u)[0]?._id) === 'liked' ? LikeFilled : LikeOutlined)}
+                                    <span className="comment-action">{rawData?.comment?.likes.length || 0}</span>
+                                </span>
+                            </Tooltip>
+                            <Tooltip key="comment-basic-dislike" title={i18n.t('button.tooltip.label.dislike')}>
+                                <span onClick={() => onDislike({ ...rawData, type: 'dislike' })}>
+                                    {React.createElement(rawData?.comment?.like?.includes(rawData?.comments?.user?.filter((u) => u?._id === rawData?.ownerId && u)[0]?._id) === 'disliked' ? DislikeFilled : DislikeOutlined)}
+                                    <span className="comment-action">{rawData?.comment?.dislike.length || 0}</span>
+                                </span>
+                            </Tooltip>
+                            <Tooltip title={i18n.t('button.tooltip.label.share')}>
+                                <ShareAltOutlined />
+                            </Tooltip>
+                        </Dropdown.Button>
                     </div>}
                     description={<div className="meta-description">
                         <small>
@@ -70,7 +86,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
         }
         >
             <div style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>{<CustomRenderElement string={content} type={'publication'} />}</div>
-            {(props?.match?.path === "/" || canPostOrComment) && <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onCreateComment={onCreateComment} onEditComment={onEditComment} />}
+            {(props?.match?.path === "/" || canPostOrComment) && <CommentComponent rawData={rawData} onDeleteComment={onDeleteComment} onLike={onLike} onDislike={onDislike} onCreateComment={onCreateComment} onEditComment={onEditComment} />}
         </Card>
     );
 }
