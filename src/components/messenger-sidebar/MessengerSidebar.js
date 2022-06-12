@@ -1,4 +1,4 @@
-import { Avatar, Input } from 'antd';
+import { Avatar, Badge, Input } from 'antd';
 import React, { useState, memo, useEffect, useRef } from 'react';
 import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
@@ -113,7 +113,9 @@ const MessengerSidebar = ({ display, user }) => {
                     <div className='friend-item' key={index} onClick={() => openConversation(friends_data)}>
                         {friends_data?.status === 'online' && <span className='online-tick'></span>}
                         {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
-                        <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
+                        <Badge count={friends_data?.unreads || 0} size={"small"}>
+                            <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
+                        </Badge>
                         <div className="friend-item-container-siderbar">
                             <span>{friends_data?.username}</span>
                             {((friends_data?.last_login + 24 * 60 * 60 * 1000) > new Date().getTime() && friends_data?.status !== 'online') ?
