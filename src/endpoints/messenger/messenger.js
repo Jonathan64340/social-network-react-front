@@ -6,8 +6,8 @@ export async function sendMessage(payload) {
         .catch(err => new Error(err))
 }
 
-export async function getMessages({ context }) {
-    return axios.get(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/messenger/get-message?context=${encodeURI(context)}`)
+export async function getMessages({ context, skip }) {
+    return axios.get(`${process.env.REACT_APP_HOSTNAME || process.env.REACT_APP_ENDPOINT}/api/v1/messenger/get-message?context=${encodeURI(context)}${skip ? `&skip=${skip}` : ''}`)
         .then(({ data }) => data)
         .catch(err => new Error(err))
 }

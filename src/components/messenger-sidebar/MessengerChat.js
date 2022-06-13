@@ -7,6 +7,7 @@ import CustomRenderElement from '../../_helper/customRender';
 import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messenger/messenger';
 import { store, socket } from '../../index';
 import i18n from '../../i18n';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const MessengerChat = () => {
     let viewedConversations = [];
@@ -32,14 +33,24 @@ const MessengerChat = () => {
         const user = store.getState()?.user;
         const [_sid, setSid] = useState(sid);
         const [form] = Form.useForm();
+        const [count, setCount] = useState(0);
 
         useEffect(() => {
             scrollToBottom()
         }, [tchat]);
 
+        const loadMoreData = () => {
+            getMessages({ context: [id, user?._id], skip: tchat?.length })
+                .then(messages => setTchat(t => ([...t.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1), ...messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)])))
+                .catch((err) => console.log(err))
+        }
+
         useEffect(() => {
             getMessages({ context: [id, user?._id] })
-                .then(messages => setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1)))
+                .then(messages => {
+                    setCount(messages[0]?.count)
+                    setTchat(messages.sort((a, b) => a?.createdAt > b?.createdAt ? 1 : -1))
+                })
                 .catch((err) => console.log(err))
 
             socket.on('messenger', data => {
@@ -143,9 +154,16 @@ const MessengerChat = () => {
                     </div>
                 </div>
             </div>
-            <div className='messenger-chat-item-content'>
-                {RenderChat}
-                <div ref={messagesEndRef} />
+            <div className='messenger-chat-item-content' id='infinite-scroll'>
+                <InfiniteScroll
+                    dataLength={tchat.length}
+                    next={loadMoreData}
+                    hasMore={count}
+                    scrollableTarget="infinite-scroll"
+                    inverse
+                >
+                    {RenderChat}
+                </InfiniteScroll>
             </div>
             <div className='messenger-chat-item-footer'>
                 <Form form={form} onFinish={sendMessage}>

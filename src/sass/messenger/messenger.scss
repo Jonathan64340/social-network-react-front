@@ -4,6 +4,8 @@
         overflow-x: hidden;
         padding: 5px 0;
         flex: 1;
+        flex-direction: column-reverse;
+        display: flex;
     }
 }
 
