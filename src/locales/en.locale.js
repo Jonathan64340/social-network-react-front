@@ -47,7 +47,8 @@ export const en = {
             "messenger": {
                 "input": {
                     "search_friend": "Search a friend"
-                }
+                },
+                "write_text": "Type message ..."
             }
         },
         "button": {

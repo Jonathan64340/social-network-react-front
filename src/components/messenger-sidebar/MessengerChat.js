@@ -1,5 +1,5 @@
-import { CloseSquareOutlined, MinusOutlined } from '@ant-design/icons';
-import { Avatar, Input, Tooltip, Form } from 'antd';
+import { CloseSquareOutlined, MinusOutlined, SendOutlined } from '@ant-design/icons';
+import { Avatar, Input, Tooltip, Form, Button } from 'antd';
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
@@ -8,8 +8,10 @@ import { getMessages, sendMessage as _sendMessage } from '../../endpoints/messen
 import { store, socket } from '../../index';
 import i18n from '../../i18n';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { withRouter } from 'react-router-dom';
+import _ from 'underscore';
 
-const MessengerChat = () => {
+const MessengerChat = ({ ...props }) => {
     let viewedConversations = [];
     const [jsxElements, setJsxElements] = useState([]);
 
@@ -20,7 +22,7 @@ const MessengerChat = () => {
     }
 
     useMemo(() => {
-        const openNewConversation = EventEmitter().subscriber('openConversation', (data) => createNewConversationItem(data));
+        const openNewConversation = EventEmitter().subscriber('openConversation', (data) => createNewConversationItem({ ...data, ...props }));
         // To destroy listenner on unmount
         return () => {
             openNewConversation && openNewConversation.unsubscribe();
@@ -28,7 +30,7 @@ const MessengerChat = () => {
         // eslint-disable-next-line
     }, [])
 
-    const MessengerChatItem = ({ id, sid, name }) => {
+    const MessengerChatItem = ({ id, sid, name, ...props }) => {
         const [tchat, setTchat] = useState([]);
         const user = store.getState()?.user;
         const [_sid, setSid] = useState(sid);
@@ -142,7 +144,7 @@ const MessengerChat = () => {
 
         return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} collapsed={"opened"}>
             <div className='messenger-chat-item-header'>
-                <div className='messenger-chat-item-header-title'>
+                <div className='messenger-chat-item-header-title' onClick={() => props?.history?.push(`/profile/${id}`)}>
                     <span>{name}</span>
                 </div>
                 <div className='messenger-chat-item-header-action'>
@@ -168,17 +170,17 @@ const MessengerChat = () => {
             <div className='messenger-chat-item-footer'>
                 <Form form={form} onFinish={sendMessage}>
                     <Form.Item name="input" initialValue={''} rules={[{ required: true, message: i18n.t('form.required.text') }]}>
-                        <Input type={'text'} size='small' bordered={false} width='100%' placeholder='Ecrire un message...' />
+                        <Input type={'text'} size='small' suffix={<Button type='text' htmlType='submit'><SendOutlined /></Button>} bordered={false} width='100%' autoComplete={false} placeholder={i18n.t('form.messenger.write_text')} />
                     </Form.Item>
                 </Form>
             </div>
         </div>)
     }
 
-    const createNewConversationItem = ({ id, username, sid }) => {
+    const createNewConversationItem = ({ id, username, sid, ...props }) => {
         if (!viewedConversations.includes(id)) {
             viewedConversations.push(id);
-            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} sid={sid} id={id} />])
+            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} sid={sid} id={id} {...props} />])
         }
     }
 
@@ -232,4 +234,4 @@ const MessengerChat = () => {
 }
 
 const mapStateToProps = ({ user }) => ({ user })
-export default connect(mapStateToProps)(MessengerChat);
+export default _.compose(connect(mapStateToProps), withRouter)(MessengerChat);

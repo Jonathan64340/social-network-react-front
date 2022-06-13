@@ -48,6 +48,7 @@ export const fr =  {
                 "input": {
                     "search_friend": "Rechercher un ami"
                 },
+                "write_text": "Ecrire un message ..."
             }
         },
         "button": {
