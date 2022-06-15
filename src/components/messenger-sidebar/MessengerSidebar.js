@@ -1,17 +1,15 @@
-import { Avatar, Badge, Input } from 'antd';
-import React, { useState, memo, useEffect, useRef } from 'react';
+import { Avatar, Badge, Button, Input } from 'antd';
+import { SettingFilled } from '@ant-design/icons';
+import React, { useState, memo, useEffect } from 'react';
 import { getFriends } from '../../endpoints/friend/friend';
 import i18n from '../../i18n';
 import { EventEmitter } from '../../utils/emitter';
 import { connect } from 'react-redux';
 import { socket } from '../../index';
-import { momentCustom as moment } from '../../_helper/moment_custom';
 
 const MessengerSidebar = ({ display, user }) => {
     const [friendList, setFriendList] = useState([]);
     const [socketUpdater, setSocketUpdater] = useState({});
-
-    const renderItemsRefs = useRef([]);
 
     let friendListTmp = [];
 
@@ -93,35 +91,24 @@ const MessengerSidebar = ({ display, user }) => {
         // eslint-disable-next-line
     }, [user?._id, socket.id, socketUpdater])
 
-    const RenderFriendsItem = ({ ...props }) => {
-        useEffect(() => {
-            setInterval(() => {
-                for (let i = 0; i < friendList.length; i++) {
-                    const last_login_data = props?.renderFriendsItem?.current[i];
-                    const last_login_data_attribute = last_login_data?.getAttribute('last-login-data');
-                    if (last_login_data) {
-                        last_login_data.innerText = moment({ date: parseInt(last_login_data_attribute), fromNowDisplay: true });
-                    }
-                }
-            }, (1000 * 60))
-            // eslint-disable-next-line
-        }, [])
+    const RenderFriendsItem = () => {
 
         return (
             <div className='friend-list'>
                 {friendList.map(({ friends_data }, index) => (
                     <div className='friend-item' key={index} onClick={() => openConversation(friends_data)}>
-                        {friends_data?.status === 'online' && <span className='online-tick'></span>}
-                        {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
-                        <Badge count={friends_data?.unreads || 0} size={"small"}>
-                            <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
-                        </Badge>
-                        <div className="friend-item-container-siderbar">
-                            <span>{friends_data?.username}</span>
-                            {((friends_data?.last_login + 24 * 60 * 60 * 1000) > new Date().getTime() && friends_data?.status !== 'online') ?
-                                <small>{i18n.t('time.connection.last_friend_login')} <span ref={el => renderItemsRefs.current[index] = el} last-login-data={friends_data?.last_login}>{moment({ date: friends_data?.last_login, fromNowDisplay: true })}</span></small>
-                                : <small>{i18n.t('time.connection.last_friend_login')}</small>
-                            }
+                        <div className='friend-item-content'>
+                            {friends_data?.status === 'online' && <span className='online-tick'></span>}
+                            {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
+                            <Badge count={friends_data?.unreads || 0} size={"small"}>
+                                <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
+                            </Badge>
+                            <div className="friend-item-container-siderbar">
+                                <span>{friends_data?.username}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <Button icon={<SettingFilled />} type="text" />
                         </div>
                     </div>
                 ))}
@@ -137,7 +124,7 @@ const MessengerSidebar = ({ display, user }) => {
         if (display === 'friend') {
             return (
                 <div className='messenger-sidebar siderbar'>
-                    <RenderFriendsItem index={1} renderFriendsItem={renderItemsRefs} />
+                    <RenderFriendsItem />
                     <div className='messenger-sidebar-friend-search'>
                         <Input bordered={false} className='messenger-sidebar-friend-search-input' type={'text'} size={'small'} placeholder={i18n.t('form.messenger.input.search_friend')}></Input>
                     </div>

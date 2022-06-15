@@ -34,13 +34,6 @@ textarea-no-border {
     border-radius: 10px !important;
 }
 
-/** MODAL **/
-.ant-modal-content {
-    background: $color-white-modal;
-    backdrop-filter: blur(6px);
-    border-radius: 20px;
-}
-
 /** SIDERBER **/
 .siderbar {
     min-height: 100vh;

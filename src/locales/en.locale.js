@@ -136,7 +136,8 @@ export const en = {
         },
         "time": {
             "connection": {
-                "last_friend_login": "Alive"
+                "last_friend_login": "Online",
+                "last_friend_login_offline": "Offline"
             }
         }
     }

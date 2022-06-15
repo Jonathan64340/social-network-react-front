@@ -45,7 +45,7 @@ const ModalCustom = ({ placeholder, current, visible, onClose, onEditPublication
     }
 
     return (
-        <Modal centered visible={visible} footer={false} onCancel={onClose} closable={false} closeIcon={false} maskClosable={false}>
+        <Modal centered visible={visible} footer={<Button onClick={() => onClose()} size='large' style={{ width: '100%' }} type='danger'>{i18n.t('form.close')}</Button>} onCancel={onClose} closable={true} closeIcon={true}>
             <Form form={form} onFinish={onFinish}>
                 <Form.Item name="publication" rules={[{ required: true, message: i18n.t('form.required.text') }]}>
                     <TextArea placeholder={i18n.t(placeholder)} allowClear autoSize={{ minRows: 1, maxRows: 5 }} />

@@ -49,7 +49,8 @@ export const fr =  {
                     "search_friend": "Rechercher un ami"
                 },
                 "write_text": "Ecrire un message ..."
-            }
+            },
+            "close": "Annuler"
         },
         "button": {
             "auth": {
@@ -136,7 +137,8 @@ export const fr =  {
         },
         "time": {
             "connection": {
-                "last_friend_login": "En ligne"
+                "last_friend_login": "En ligne",
+                "last_friend_login_offline": "Hors ligne"
             }
         }
     }

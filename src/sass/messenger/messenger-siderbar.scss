@@ -100,9 +100,15 @@
             border-bottom: 1px solid $color-header-toolbar-primary;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            width: 200px;
             &:hover {
                 cursor: pointer;
                 background-color: $color-medium-black;
+            }
+            &-content {
+                display: flex;
+                align-items: center;
             }
             .online-tick {
                 top: 35px;
@@ -125,12 +131,12 @@
                 height: 30px;
                 border: 3px solid $color-light-black;
                 box-shadow: 0 0 2px black;
-                margin-right: 6px;
             }
             &-container-siderbar {
                 display: flex;
                 flex-direction: column;
                 line-height: 12px;
+                margin-left: 8px;
             }
         }
     }
