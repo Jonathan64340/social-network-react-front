@@ -96,12 +96,12 @@ const MessengerSidebar = ({ display, user }) => {
         return (
             <div className='friend-list'>
                 {friendList.map(({ friends_data }, index) => (
-                    <div className='friend-item' key={index} onClick={() => openConversation(friends_data)}>
+                    <div className='friend-item' key={index} onClick={() => openConversation({ friends_data, index })}>
                         <div className='friend-item-content'>
                             {friends_data?.status === 'online' && <span className='online-tick'></span>}
                             {friends_data?.status === 'busy' && <span className='busy-tick'></span>}
                             <Badge count={friends_data?.unreads || 0} size={"small"}>
-                                <Avatar src="https://joeschmoe.io/api/v1/random" size="small" className='friend-item-avatar' />
+                                <Avatar src={friends_data?.avatar_url} size="small" className='friend-item-avatar' />
                             </Badge>
                             <div className="friend-item-container-siderbar">
                                 <span>{friends_data?.username}</span>
@@ -116,8 +116,12 @@ const MessengerSidebar = ({ display, user }) => {
         )
     }
 
-    const openConversation = ({ _id, username, sid, status }) => {
-        EventEmitter().emit('openConversation', { id: _id, username, sid, status });
+    const openConversation = ({ _id, username, sid, status, ...payload }) => {
+        if (payload?.friends_data?.unreads) {
+            delete payload.friends_data.unreads
+        }
+        setFriendList(f => ([...f?.filter(g => g?.friends_data?._id !== payload?.friends_data?._id), payload]))
+        EventEmitter().emit('openConversation', { id: payload?.friends_data?._id, username: payload?.friends_data?.username, sid: payload?.friends_data?.sid, status });
     }
 
     const render = () => {

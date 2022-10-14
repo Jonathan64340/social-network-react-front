@@ -1,13 +1,16 @@
 import { Button } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import React, { useEffect, useState } from 'react';
-import { getUser } from '../../endpoints/profile/profile';
+import { getUser, updateUser } from '../../endpoints/profile/profile';
 import { withRouter } from 'react-router-dom';
 import i18n from '../../i18n';
-import { socket } from '../../index';
+import { socket, store } from '../../index';
 import { getFriendRequest, sendFriendRequest, replyFriendRequest } from '../../endpoints/friend/friend';
 import { EventEmitter } from '../../utils/emitter';
 import UploadFile from '../upload/Upload';
+import { uploadFile } from '../../endpoints/media/upload';
+import { setUpdateProfile } from '../../actions/user.actions';
+import { connect } from 'react-redux';
 
 const Header = ({ user, onReplyFriend, ...props }) => {
   const [_viewUser, setViewUser] = useState({});
@@ -72,7 +75,11 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     }
 
     // eslint-disable-next-line
-  }, [props?.match?.params?.id, user])
+  }, [props?.match?.params?.id, user?._id])
+
+  useEffect(() => {
+    console.log(user)
+  }, [user])
 
   const sendFriendRequestAction = () => {
     sendFriendRequest({
@@ -108,33 +115,36 @@ const Header = ({ user, onReplyFriend, ...props }) => {
     EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username, sid: _viewUser?.sid });
   }
 
-  const uploadProps = {
-    name: 'file',
-    action: '',
-    headers: {
-      authorization: 'authorization-text',
-    },
-
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
+  const uploadProps = (key) => ({
+    name: 'avatar',
+    customRequest: async (options) => {
+      const data = new FormData()
+      data.append('file', options.file)
+      const config = {
+        "headers": {
+          "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+        }
       }
-
-      if (info.file.status === 'done') {
-      } else if (info.file.status === 'error') {
-      }
-    },
-  }
+      uploadFile(data, config)
+        .then(async res => {
+          await updateUser({ ...user, [key]: res?.data?.path });
+          props?.dispatch(setUpdateProfile({ [key]: res?.data?.path }))
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  })
 
   return <div className="header-container">
     <div className="header-container-background-cover" style={{
-      background: `url(${(props?.match?.params?.id ? _viewUser?.cover_url : user?.cover_url )|| 'https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg'})`
+      background: `url(${(props?.match?.params?.id ? _viewUser?.cover_url : user?.cover_url) || 'https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg'})`
     }}>
-      {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps} />}
+      {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps('cover_url')} />}
       <div className="header-container-profile">
         <Avatar src={(props?.match?.params?.id ? _viewUser?.avatar_url : user?.avatar_url) || "https://joeschmoe.io/api/v1/random"} className="header-container-avatar" />
         <div className="profile-picture-container">
-          {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps} />}
+          {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps('avatar_url')} />}
         </div>
         <div className="header-container-profile-name">
           <span>{_viewUser?.username || user?.username}</span>
@@ -156,4 +166,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
   </div>
 }
 
-export default withRouter(Header);
+const mapStateToProps = ({ user }) => ({ user })
+const mapDispatchToProps = dispatch => ({ dispatch })
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

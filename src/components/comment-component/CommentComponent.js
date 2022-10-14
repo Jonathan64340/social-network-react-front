@@ -90,10 +90,11 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
             locale={{ emptyText: (<div></div>) }}
             renderItem={(item) => (
                 <List>
+                    {console.log(item)}
                     <Comment
                         actions={actions(item)}
                         author={<Link to={`/profile/${rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id}`}>{rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username}</Link>}
-                        avatar={<Link to={`/profile/${rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id}`}><Avatar src="https://joeschmoe.io/api/v1/random" alt={rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username} /></Link>}
+                        avatar={<Link to={`/profile/${rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?._id}`}><Avatar src={rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.avatar_url} alt={rawData?.comments?.user?.filter((u) => u?._id === item?.ownerId && u)[0]?.username} /></Link>}
                         content={
                             <p style={{ display: 'flex', flexDirection: 'column-reverse', lineHeight: '16px' }}>
                                 {<CustomRenderElement string={item?.content} type={'publication'} />}
@@ -114,7 +115,7 @@ const CommentComponent = ({ rawData, user, onDeleteComment, onCreateComment, onE
         </List>
 
         <Comment
-            avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+            avatar={<Avatar src={user?.avatar_url} alt="Han Solo" />}
             content={
                 <Editor
                     submitting={isLoading}

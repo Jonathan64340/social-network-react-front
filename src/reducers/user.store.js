@@ -1,4 +1,4 @@
-import { SET_USER, SET_LOGOUT_USER, SET_SOCKET_PROVIDER } from '../contants/user.contants';
+import { SET_USER, SET_LOGOUT_USER, SET_SOCKET_PROVIDER, SET_UPDATE_PROFILE } from '../contants/user.contants';
 
 const user = (state = { isLogged: false, isAdmin: false }, action) => {
     switch (action.type) {
@@ -6,6 +6,12 @@ const user = (state = { isLogged: false, isAdmin: false }, action) => {
             return {
                 ...state,
                 isLogged: true,
+                ...action.payload
+            }
+
+        case SET_UPDATE_PROFILE:
+            return {
+                ...state,
                 ...action.payload
             }
 

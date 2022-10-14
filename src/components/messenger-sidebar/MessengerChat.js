@@ -31,6 +31,7 @@ const MessengerChat = ({ ...props }) => {
     }, [])
 
     const MessengerChatItem = ({ id, sid, name, ...props }) => {
+
         const [tchat, setTchat] = useState([]);
         const user = store.getState()?.user;
         const [_sid, setSid] = useState(sid);
@@ -122,8 +123,8 @@ const MessengerChat = ({ ...props }) => {
                                     <>
                                         {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
                                             <div className="content-avatar">
-                                                <Avatar size="small" src={""}>
-                                                    {name.length > 1 ? name.substring(0, name.length - (name.length - 1)) : name}
+                                                <Avatar size="small" src={el?.avatar_url}>
+                                                    {name?.length > 1 ? name?.substring(0, name?.length - (name?.length - 1)) : name}
                                                 </Avatar>
                                             </div>
                                         }

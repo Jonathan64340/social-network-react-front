@@ -1,7 +1,12 @@
-import { SET_USER, SET_LOGOUT_USER, SET_SOCKET_PROVIDER } from "../contants";
+import { SET_USER, SET_LOGOUT_USER, SET_SOCKET_PROVIDER, SET_UPDATE_PROFILE } from "../contants";
 
 const setLogin = (payload) => ({
     type: SET_USER,
+    payload
+})
+
+const setUpdateProfile = (payload) => ({
+    type: SET_UPDATE_PROFILE,
     payload
 })
 
@@ -15,4 +20,4 @@ const setLogout = (payload) => ({
     payload
 })
 
-export { setLogin, setLogout, setSocketProvider }
+export { setLogin, setLogout, setSocketProvider, setUpdateProfile }

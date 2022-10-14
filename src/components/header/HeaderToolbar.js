@@ -38,7 +38,7 @@ const HeaderToolbar = ({ user, ...props }) => {
                         renderItem={(item) => (
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" size="small" />}
+                                    avatar={<Avatar src={item?.avatar_url} size="small" />}
                                     title={<div className="meta-container" onClick={() => goToUserProfile(item?._id)}>
                                         <span>{item?.username}</span>
                                     </div>}
@@ -55,7 +55,7 @@ const HeaderToolbar = ({ user, ...props }) => {
                     </Button>
                     <div className="user-container" onClick={() => props?.history?.push('/')}>
                         <span>{user?.username}</span>
-                        <Avatar src="https://joeschmoe.io/api/v1/random" size="small" />
+                        <Avatar src={user?.avatar_url} size="small" />
                     </div>
                 </div>
             </div>
