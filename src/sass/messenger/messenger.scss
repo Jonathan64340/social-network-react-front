@@ -7,6 +7,13 @@
         flex-direction: column-reverse;
         display: flex;
     }
+    &-header {
+        min-height: 50px;
+        &-name {
+            margin-left: 12px;
+            font-size: 0.9rem;
+        }
+    }
 }
 
 .messenger-chat-item-container::-webkit-scrollbar {

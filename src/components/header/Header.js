@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getUser, updateUser } from '../../endpoints/profile/profile';
 import { withRouter } from 'react-router-dom';
 import i18n from '../../i18n';
-import { socket, store } from '../../index';
+import { socket } from '../../index';
 import { getFriendRequest, sendFriendRequest, replyFriendRequest } from '../../endpoints/friend/friend';
 import { EventEmitter } from '../../utils/emitter';
 import UploadFile from '../upload/Upload';
@@ -112,7 +112,7 @@ const Header = ({ user, onReplyFriend, ...props }) => {
   }
 
   const openConversation = () => {
-    EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username, sid: _viewUser?.sid });
+    EventEmitter().emit('openConversation', { id: props?.match?.params?.id, username: _viewUser?.username, avatar_url: _viewUser?.avatar_url, sid: _viewUser?.sid });
   }
 
   const uploadProps = (key) => ({

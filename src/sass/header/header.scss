@@ -8,11 +8,12 @@
         background-size: cover !important;
         height: 100%;
         position: relative;
+        border-radius: 0 0 20px 20px;
 
         .profile-cover-upload {
             position: absolute;
             top: 10px;
-            right:10px;
+            right: 10px;
             border-radius: 100%;
             background: $color-light-white;
             width: 25px;
@@ -23,6 +24,7 @@
             transition: .6s ease-in-out all;
             border: 2px solid #f8f8f8f8;
             box-shadow: 0 0 5px black;
+
             &:hover {
                 cursor: pointer;
             }
@@ -38,6 +40,20 @@
         align-items: center;
         font-size: 1rem;
         width: 100%;
+
+        &-name {
+            span {
+                background: $color-show-toolbar-black;
+                border-radius: 8px;
+                padding: 4px 8px;
+                box-shadow: 0px 0px 22px 0px rgba(0, 0, 0, 0.3) inset;
+                -webkit-box-shadow: 0px 0px 22px 0px rgba(0, 0, 0, 0.3) inset;
+                -moz-box-shadow: 0px 0px 22px 0px rgba(0, 0, 0, 0.3) inset;
+                border-width: 1px;
+                border-color: $color-white-modal;
+                border-style: solid;
+            }
+        }
 
         .profile-picture-container {
             position: relative;
@@ -64,10 +80,10 @@
         }
 
         .header-container-avatar {
-            width: 120px;
-            height: 120px;
-            min-width: 120px;
-            min-height: 120px;
+            width: 140px;
+            height: 140px;
+            min-width: 140px;
+            min-height: 140px;
             border: 3px solid $color-light-black;
             margin: 0 30px;
             box-shadow: 0 0 5px black;

@@ -30,7 +30,7 @@ const MessengerChat = ({ ...props }) => {
         // eslint-disable-next-line
     }, [])
 
-    const MessengerChatItem = ({ id, sid, name, ...props }) => {
+    const MessengerChatItem = ({ id, sid, name, avatar_url, ...props }) => {
 
         const [tchat, setTchat] = useState([]);
         const user = store.getState()?.user;
@@ -123,7 +123,7 @@ const MessengerChat = ({ ...props }) => {
                                     <>
                                         {(tchat[index]?.senderId !== tchat[index + 1]?.senderId) &&
                                             <div className="content-avatar">
-                                                <Avatar size="small" src={el?.avatar_url}>
+                                                <Avatar size="small" src={avatar_url}>
                                                     {name?.length > 1 ? name?.substring(0, name?.length - (name?.length - 1)) : name}
                                                 </Avatar>
                                             </div>
@@ -146,7 +146,10 @@ const MessengerChat = ({ ...props }) => {
         return (<div className='messenger-chat-item-container' id={`conversation-item-${id}`} collapsed={"opened"}>
             <div className='messenger-chat-item-header'>
                 <div className='messenger-chat-item-header-title' onClick={() => props?.history?.push(`/profile/${id}`)}>
-                    <span>{name}</span>
+                    <Avatar size="default" src={avatar_url}>
+                        {name?.length > 1 ? name?.substring(0, name?.length - (name?.length - 1)) : name}
+                    </Avatar>
+                    <span className='messenger-chat-item-header-name'>{name}</span>
                 </div>
                 <div className='messenger-chat-item-header-action'>
                     <div className='messenger-chat-item-header-action-minimize'>
@@ -178,10 +181,10 @@ const MessengerChat = ({ ...props }) => {
         </div>)
     }
 
-    const createNewConversationItem = ({ id, username, sid, ...props }) => {
+    const createNewConversationItem = ({ id, username, sid, avatar_url }) => {
         if (!viewedConversations.includes(id)) {
             viewedConversations.push(id);
-            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} sid={sid} id={id} {...props} />])
+            setJsxElements(jsx => [...jsx, <MessengerChatItem name={username} sid={sid} id={id} avatar_url={avatar_url} {...props} />])
         }
     }
 
@@ -200,7 +203,8 @@ const MessengerChat = ({ ...props }) => {
             const conversationItem = document.getElementById(`conversation-item-${id}`);
             conversationItem.style.position = 'relative';
             conversationItem.style.bottom = '0';
-            conversationItem.style.height = '30px';
+            conversationItem.style.height = '50px';
+            conversationItem.style.transition = 'all 0.4s cubic-bezier(1, -0.16, 0.25, 1) 0s';
             if (element) {
                 element.setAttribute('collapsed', 'closed')
             }
