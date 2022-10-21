@@ -53,7 +53,7 @@ const PublicationDetail = ({ content, id, user, onDelete, onDeleteComment, onCre
         <Card className="meta-card" cover={
             <>
                 <Meta
-                    avatar={<Avatar src={user?.avatar_url} />}
+                    avatar={<Avatar src={rawData?.user?.avatar_url} />}
                     title={<div className="meta-container">
                         <span>{rawData?.user?.username}</span>
                         <Dropdown.Button trigger={['click']} overlay={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? menu : <Menu />} icon={(props?.match?.path === '/' || user?._id === rawData?.ownerId) ? <MoreOutlined /> : <></>} type="text">

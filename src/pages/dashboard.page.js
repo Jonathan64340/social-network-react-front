@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'underscore';
 import MessengerSidebar from '../components/messenger-sidebar/MessengerSidebar';
 import MessengerChat from '../components/messenger-sidebar/MessengerChat';
+import { Blocks } from 'react-loader-spinner'
 const { Content, Header, Footer } = Layout;
 
 const Dashboard = ({ user, ...props }) => {
@@ -19,7 +20,7 @@ const Dashboard = ({ user, ...props }) => {
     const [viewUser, setViewUser] = useState(user?._id);
     const [visible, setVisible] = useState(false);
     const [canPostOrComment, setCanPostOrComment] = useState(false);
-
+    console.log(user)
     useEffect(() => {
         if (props?.match?.params?.id) {
             setViewUser(props?.match?.params?.id);
@@ -167,39 +168,53 @@ const Dashboard = ({ user, ...props }) => {
 
     return (
         <>
-            <Header className="toolbar-container sticky">
-                <HeaderToolbar />
-            </Header>
-            <Layout hasSider className="dashboard-container sticky">
-                <Layout.Sider>
-                    <MessengerSidebar display='default' />
-                </Layout.Sider>
-                <Content>
-                    <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
-                    <PublicationForm onCreate={onCreate} onEdit={handleEdit} canPostOrComment={canPostOrComment} />
-                    {publication.map((_publication, index) => (<PublicationDetail
-                        content={_publication?.content}
-                        time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
-                        id={_publication._id}
-                        onDelete={onDelete}
-                        onDeleteComment={onDeleteComment}
-                        onCreateComment={onCreateComment}
-                        onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
-                        onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
-                        onLike={(rawData) => onLike({ ...rawData, type: 'edit-comment' })}
-                        onDislike={(rawData) => onDislike({ ...rawData, type: 'edit-comment' })}
-                        rawData={_publication}
-                        canPostOrComment={canPostOrComment}
-                        key={index}
-                    />))}
-                    <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
-                    <MessengerChat />
-                </Content>
-                <Layout.Sider className='sider-messenger sticky'>
-                    <MessengerSidebar display='friend' />
-                </Layout.Sider>
-            </Layout>
-            <Footer></Footer>
+            {
+                !user?.accessToken
+                    ? <div className='loader-full'>
+                        <Blocks
+                            visible={true}
+                            height="200"
+                            width="200"
+                            ariaLabel="blocks-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="blocks-wrapper"
+                        />
+                    </div> : <>
+                        <Header className="toolbar-container sticky">
+                            <HeaderToolbar />
+                        </Header>
+                        <Layout hasSider className="dashboard-container sticky">
+                            <Layout.Sider>
+                                <MessengerSidebar display='default' />
+                            </Layout.Sider>
+                            <Content>
+                                <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
+                                <PublicationForm onCreate={onCreate} onEdit={handleEdit} canPostOrComment={canPostOrComment} />
+                                {publication.map((_publication, index) => (<PublicationDetail
+                                    content={_publication?.content}
+                                    time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
+                                    id={_publication._id}
+                                    onDelete={onDelete}
+                                    onDeleteComment={onDeleteComment}
+                                    onCreateComment={onCreateComment}
+                                    onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
+                                    onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
+                                    onLike={(rawData) => onLike({ ...rawData, type: 'edit-comment' })}
+                                    onDislike={(rawData) => onDislike({ ...rawData, type: 'edit-comment' })}
+                                    rawData={_publication}
+                                    canPostOrComment={canPostOrComment}
+                                    key={index}
+                                />))}
+                                <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
+                                <MessengerChat />
+                            </Content>
+                            <Layout.Sider className='sider-messenger sticky'>
+                                <MessengerSidebar display='friend' />
+                            </Layout.Sider>
+                        </Layout>
+                        <Footer></Footer>
+                    </>
+            }
         </>
     )
 }

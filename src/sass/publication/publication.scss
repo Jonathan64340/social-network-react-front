@@ -1,3 +1,10 @@
+.loader-full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
 .dashboard-container {
     &.sticky {
         padding-top: 64px;

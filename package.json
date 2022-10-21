@@ -17,6 +17,7 @@
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.15.1",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-loader-spinner": "^5.3.4",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",

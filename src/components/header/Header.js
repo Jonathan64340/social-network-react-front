@@ -138,11 +138,11 @@ const Header = ({ user, onReplyFriend, ...props }) => {
 
   return <div className="header-container">
     <div className="header-container-background-cover" style={{
-      background: `url(${(props?.match?.params?.id ? _viewUser?.cover_url : user?.cover_url) || 'https://www.terre.tv/wp-content/uploads/2020/05/plus-belles-plages-cuba-1024x671.jpg'})`
+      background: `url(${(props?.match?.params?.id ? _viewUser?.cover_url : user?.cover_url)})`
     }}>
       {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-cover-upload"} title={i18n.t('button.file.picture.cover.change')} placement={'left'} uploadProps={uploadProps('cover_url')} />}
       <div className="header-container-profile">
-        <Avatar src={(props?.match?.params?.id ? _viewUser?.avatar_url : user?.avatar_url) || "https://joeschmoe.io/api/v1/random"} className="header-container-avatar" />
+        <Avatar src={(props?.match?.params?.id ? _viewUser?.avatar_url : user?.avatar_url)} className="header-container-avatar" />
         <div className="profile-picture-container">
           {!props?.match?.params?.id && <UploadFile type={"picture"} className={"profile-picture-upload"} title={i18n.t('button.file.picture.profile.change')} placement={'right'} uploadProps={uploadProps('avatar_url')} />}
         </div>
