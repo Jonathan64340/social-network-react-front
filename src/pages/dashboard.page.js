@@ -20,7 +20,8 @@ const Dashboard = ({ user, ...props }) => {
     const [viewUser, setViewUser] = useState(user?._id);
     const [visible, setVisible] = useState(false);
     const [canPostOrComment, setCanPostOrComment] = useState(false);
-    console.log(user)
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         if (props?.match?.params?.id) {
             setViewUser(props?.match?.params?.id);
@@ -33,9 +34,11 @@ const Dashboard = ({ user, ...props }) => {
     useEffect(() => {
 
         if ((user?.isLogged && user?._id && viewUser) || (user?.isLogged && user?._id)) {
+            setLoading(true);
             getPublication({ _id: viewUser || user?._id })
                 .then(result => {
                     setPublication(result);
+                    setLoading(false);
                 })
         }
         // eslint-disable-next-line
@@ -188,23 +191,36 @@ const Dashboard = ({ user, ...props }) => {
                                 <MessengerSidebar display='default' />
                             </Layout.Sider>
                             <Content>
-                                <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
-                                <PublicationForm onCreate={onCreate} onEdit={handleEdit} canPostOrComment={canPostOrComment} />
-                                {publication.map((_publication, index) => (<PublicationDetail
-                                    content={_publication?.content}
-                                    time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
-                                    id={_publication._id}
-                                    onDelete={onDelete}
-                                    onDeleteComment={onDeleteComment}
-                                    onCreateComment={onCreateComment}
-                                    onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
-                                    onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
-                                    onLike={(rawData) => onLike({ ...rawData, type: 'edit-comment' })}
-                                    onDislike={(rawData) => onDislike({ ...rawData, type: 'edit-comment' })}
-                                    rawData={_publication}
-                                    canPostOrComment={canPostOrComment}
-                                    key={index}
-                                />))}
+                                {
+                                    loading ? <div className='loader-full-inside'>
+                                        <Blocks
+                                            visible={true}
+                                            height="200"
+                                            width="200"
+                                            ariaLabel="blocks-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClass="blocks-wrapper"
+                                        />
+                                    </div> : <>
+                                        <HeaderCustom user={user} onReplyFriend={setCanPostOrComment} />
+                                        <PublicationForm onCreate={onCreate} onEdit={handleEdit} canPostOrComment={canPostOrComment} />
+                                        {publication.map((_publication, index) => (<PublicationDetail
+                                            content={_publication?.content}
+                                            time={{ createdAt: _publication?.createdAt, modifiedAt: _publication?.modifiedAt }}
+                                            id={_publication._id}
+                                            onDelete={onDelete}
+                                            onDeleteComment={onDeleteComment}
+                                            onCreateComment={onCreateComment}
+                                            onEdit={(rawData) => onEdit({ ...rawData, type: 'edit-publication' })}
+                                            onEditComment={(rawData) => onEdit({ ...rawData, type: 'edit-comment' })}
+                                            onLike={(rawData) => onLike({ ...rawData, type: 'edit-comment' })}
+                                            onDislike={(rawData) => onDislike({ ...rawData, type: 'edit-comment' })}
+                                            rawData={_publication}
+                                            canPostOrComment={canPostOrComment}
+                                            key={index}
+                                        />))}
+                                    </>
+                                }
                                 <Modal visible={visible} onClose={onCloseModal} current={current} onEditPublication={handleEdit} onEditComment={handleEdit} />
                                 <MessengerChat />
                             </Content>

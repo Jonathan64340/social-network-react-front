@@ -3,6 +3,19 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    z-index: 1000000;
+}
+
+.loader-full-inside {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px);
+    z-index: 1000000;
+}
+
+.blocks-wrapper {
+    z-index: 1;
 }
 
 .dashboard-container {
